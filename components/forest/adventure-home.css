@@ -1,0 +1,549 @@
+/* The adventure entrance is scoped to the home screen; learning views keep their layout. */
+.explorer-home {
+  --explorer-ink: #193e3d;
+  color: var(--explorer-ink);
+  padding-top: 20px;
+}
+.explorer-home .lesson-shortcuts {
+  margin-bottom: 18px;
+}
+.explorer-hero {
+  position: relative;
+  min-height: 430px;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 28px;
+  background: #d9efea;
+  border: 1px solid #cfe6df;
+}
+.explorer-hero-art {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 56%;
+}
+.explorer-hero::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(90deg, #e7f5eedf 0%, #e7f5eec9 30%, #e7f5ee00 65%);
+}
+.explorer-hero-copy {
+  padding: 44px 38px 48px;
+  width: 58%;
+}
+.explorer-kicker {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  color: #416e62;
+  font-weight: 850;
+}
+.explorer-home h1 {
+  font-size: clamp(32px, 3.4vw, 43px);
+  line-height: 1.35;
+  letter-spacing: -0.055em;
+  margin: 19px 0 16px;
+  color: #193e3d;
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+.explorer-hero h1 span {
+  display: block;
+  color: #237b60;
+}
+.explorer-home .explorer-hero p {
+  color: #42665c;
+  font-size: 15px;
+  line-height: 1.85;
+}
+.explorer-start {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 24px;
+  padding: 14px 22px;
+  min-height: 54px;
+  background: #ffd568;
+  border: 1px solid #f2c14e;
+  border-radius: 15px;
+  box-shadow: 0 4px 0 #d9a940;
+  color: #27453c;
+  font-weight: 850 !important;
+  font-size: 16px !important;
+  transition: transform 0.15s;
+}
+.explorer-start:hover {
+  transform: translateY(-2px);
+}
+.explorer-hero-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  color: #466a5d;
+  font-size: 11px;
+}
+.explorer-location {
+  position: absolute;
+  bottom: 20px;
+  right: 22px;
+  padding: 10px 14px;
+  border: 1px solid #ffffffb0;
+  background: #fffdf0e8;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: #375f50;
+  box-shadow: 0 4px 16px #28584212;
+}
+.explorer-location > span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #53a672;
+  margin-right: 6px;
+}
+.explorer-location small {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0;
+  margin-top: 2px;
+}
+.explorer-home .explorer-passport {
+  position: relative;
+  margin: 18px 0 34px;
+  padding: 18px 24px;
+  border: 1px solid #e2e6db;
+  background: #fffdf6;
+  border-radius: 19px;
+  box-shadow: 0 5px 0 #eaece1;
+}
+.explorer-passport .run-companion-face {
+  border: 2px solid #e8d9a1;
+  background: #fff1c2;
+}
+.explorer-passport .run-companion small {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.explorer-passport > div strong {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  color: #2d6553;
+}
+.explorer-passport > div strong small {
+  font-size: 13px;
+  font-weight: 500;
+  color: #7b8978;
+}
+.explorer-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.explorer-home .explorer-section-heading h2 {
+  margin-top: 7px;
+  color: #193e3d;
+  font-size: 26px;
+  font-weight: 850;
+}
+.explorer-home .explorer-section-heading p {
+  font-size: 13px;
+  color: #768277;
+  margin-top: 5px;
+}
+.explorer-daily {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #e9f1df;
+  border: 1px solid #dce5cc;
+  padding: 9px 13px;
+  border-radius: 30px;
+  white-space: nowrap;
+  font-size: 12px;
+  color: #48623e;
+}
+.explorer-daily b {
+  margin-left: 6px;
+}
+.explorer-mission-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 19px;
+}
+.explorer-mission {
+  overflow: hidden;
+  min-width: 0;
+  text-align: left;
+  background: #fffdf8;
+  border: 1px solid #e1e5d9;
+  border-radius: 21px;
+  box-shadow: 0 5px 0 #e5e8da;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+.explorer-mission:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 9px 0 #e5e8da;
+}
+.explorer-mission-art {
+  position: relative;
+  height: 178px;
+  background: #dfedce;
+}
+.explorer-mission-art > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mission-words .explorer-mission-art > img {
+  object-position: center 38%;
+}
+.mission-books .explorer-mission-art {
+  background: #eee0c3;
+}
+.mission-books .explorer-mission-art > img {
+  object-fit: contain;
+  padding: 15px 12px;
+  transform: rotate(-7deg);
+  filter: drop-shadow(5px 7px 4px #51422e30);
+}
+.explorer-stop {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 8px;
+  background: #fffdf3f2;
+  border: 1px solid #ffffffb0;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 850;
+  color: #2e5444;
+}
+.explorer-stop > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 8px;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+.explorer-mission-icon {
+  position: absolute;
+  bottom: -18px;
+  right: 18px;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  background: #e7efcd;
+  border: 4px solid #fffdf8;
+  border-radius: 14px;
+  color: #376b46;
+}
+.mission-books .explorer-mission-icon {
+  background: #fae9c4;
+  color: #936b37;
+}
+.mission-games .explorer-mission-icon {
+  background: #dceafb;
+  color: #426687;
+}
+.explorer-mission-copy {
+  padding: 22px 19px 18px;
+}
+.explorer-mission-copy > small {
+  color: #7b896f;
+  font-size: 10px;
+  font-weight: 700;
+}
+.explorer-home .explorer-mission-copy h3 {
+  font-size: 23px;
+  font-weight: 850;
+  color: #254d42;
+  margin: 4px 0 6px;
+}
+.explorer-home .explorer-mission-copy p {
+  font-size: 12px;
+  color: #748070;
+  line-height: 1.7;
+  min-height: 42px;
+}
+.explorer-mission-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 13px;
+  margin-top: 13px;
+  border-top: 1px dashed #dce3d3;
+  color: #376950;
+  font-size: 13px;
+  font-weight: 750;
+}
+.explorer-stadium {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: repeating-linear-gradient(
+    0deg,
+    #64b18b 0px,
+    #64b18b 28px,
+    #71bd97 28px,
+    #71bd97 56px
+  );
+}
+.explorer-goal {
+  position: absolute;
+  width: 60%;
+  height: 74px;
+  left: 20%;
+  top: 35px;
+  border: 5px solid #fff7df;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 12px,
+      #ffffff66 12px,
+      #ffffff66 13px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 14px,
+      #ffffff66 14px,
+      #ffffff66 15px
+    );
+  transform: perspective(250px) rotateX(-6deg);
+  box-shadow: 8px 5px 0 #284e3e20;
+}
+.explorer-stadium > span {
+  position: absolute;
+  bottom: 9px;
+  left: 42%;
+  font-size: 55px;
+  filter: drop-shadow(3px 5px 2px #1a543744);
+  transform: rotate(-15deg);
+}
+.explorer-stadium > i {
+  position: absolute;
+  right: 10px;
+  top: 18px;
+  padding: 5px 9px;
+  border-radius: 7px;
+  background: #ffda7e;
+  color: #43624b;
+  transform: rotate(9deg);
+  font-size: 13px;
+  font-weight: 900;
+}
+.explorer-home .explorer-footnote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 18px 0 30px;
+  color: #7e8976;
+  font-size: 11px;
+}
+.explorer-home .forest-search {
+  border-radius: 17px;
+  background: white;
+  border-color: #e0e6d7;
+}
+.explorer-home .english-today {
+  background: #fff3cf;
+  border-color: #f1dfac;
+  border-radius: 21px;
+}
+.explorer-home .english-word-card {
+  border-radius: 18px;
+  box-shadow: 0 3px 0 #e5e8dd;
+}
+@media (max-width: 760px) {
+  .explorer-hero {
+    min-height: 570px;
+  }
+  .explorer-hero-art {
+    object-position: right bottom;
+    height: 68%;
+    top: auto;
+  }
+  .explorer-hero::before {
+    background: linear-gradient(180deg, #e7f5ee 0%, #e7f5ee 32%, #e7f5ee88 49%, transparent 69%);
+  }
+  .explorer-hero-copy {
+    width: 100%;
+    padding: 28px 25px 35px;
+  }
+  .explorer-home h1 {
+    font-size: 33px;
+    margin: 13px 0 10px;
+  }
+  .explorer-hero h1 span {
+    display: block;
+  }
+  .explorer-home .explorer-hero p {
+    font-size: 13px;
+  }
+  .explorer-start {
+    margin-top: 17px;
+    padding: 11px 19px;
+    min-height: 49px;
+  }
+  .explorer-hero-note {
+    display: none;
+  }
+  .explorer-location {
+    bottom: 13px;
+    right: 13px;
+    padding: 7px 10px;
+  }
+  .explorer-home .explorer-passport {
+    padding: 14px;
+    margin: 16px 0 28px;
+  }
+  .explorer-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .explorer-home .explorer-section-heading h2 {
+    font-size: 24px;
+  }
+  .explorer-daily {
+    padding: 7px 11px;
+    font-size: 11px;
+  }
+  .explorer-mission-grid {
+    gap: 14px;
+    grid-template-columns: 1fr;
+  }
+  .explorer-mission {
+    display: grid;
+    grid-template-columns: 38% minmax(0, 1fr);
+    border-radius: 18px;
+  }
+  .explorer-mission-art {
+    height: 100%;
+    min-height: 174px;
+  }
+  .explorer-mission-copy {
+    padding: 17px 14px;
+  }
+  .explorer-home .explorer-mission-copy h3 {
+    font-size: 21px;
+  }
+  .explorer-mission-copy p {
+    font-size: 11px;
+  }
+  .explorer-mission-icon {
+    bottom: 10px;
+    right: 8px;
+    width: 33px;
+    height: 33px;
+    border-width: 3px;
+    border-radius: 10px;
+  }
+  .explorer-mission-icon svg {
+    width: 18px;
+  }
+  .explorer-stop {
+    top: 8px;
+    left: 8px;
+    font-size: 11px;
+    padding: 4px 6px;
+  }
+  .explorer-stop > span {
+    font-size: 7px;
+    letter-spacing: 0;
+  }
+  .explorer-mission-action {
+    font-size: 11px;
+    padding-top: 10px;
+    margin-top: 9px;
+  }
+  .explorer-stadium > span {
+    left: 15%;
+    bottom: 28px;
+    font-size: 42px;
+  }
+  .explorer-stadium > i {
+    font-size: 10px;
+    top: 48px;
+    right: 5px;
+  }
+  .explorer-goal {
+    width: 78%;
+    left: 11%;
+    top: 72px;
+    height: 55px;
+    border-width: 4px;
+  }
+  .explorer-home .explorer-footnote {
+    align-items: flex-start;
+    font-size: 10px;
+    text-align: center;
+  }
+  .explorer-footnote svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+}
+@media (max-width: 380px) {
+  .explorer-hero-copy {
+    padding: 24px 19px;
+  }
+  .explorer-kicker {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+  .explorer-home h1 {
+    font-size: 29px;
+  }
+  .explorer-home .explorer-passport {
+    gap: 10px;
+  }
+  .explorer-passport > div > span {
+    font-size: 9px;
+  }
+  .explorer-mission {
+    grid-template-columns: 35% minmax(0, 1fr);
+  }
+  .explorer-home .explorer-mission-copy h3 {
+    font-size: 19px;
+  }
+  .explorer-mission-copy {
+    padding: 16px 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .explorer-start,
+  .explorer-mission {
+    transition: none;
+  }
+}

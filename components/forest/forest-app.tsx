@@ -39,11 +39,12 @@ import {
   type AdventureProgress,
   type ActivityId,
 } from '@/lib/forest/adventures';
-import { StoryScene } from './adventures/shared';
+import { AdventureHome } from './adventure-home';
 import { StoryLibrary } from './adventures/stories';
 import { GameArcade } from './adventures/games';
 import './forest.css';
 import './adventures/adventures.css';
+import './adventure-home.css';
 type View =
   | 'home'
   | 'word'
@@ -389,7 +390,7 @@ export function ForestApp() {
           </button>
         </div>
       )}
-      <main className="forest-main" aria-busy={!ready}>
+      <main className={`forest-main${view === 'home' ? ' explorer-home' : ''}`} aria-busy={!ready}>
         {['home', 'word', 'practice', 'quiz', 'result'].includes(view) && (
           <nav className="lesson-shortcuts" aria-label="생활 영어 빠른 연습">
             <span>내 말로 연습해요</span>
@@ -405,78 +406,21 @@ export function ForestApp() {
         )}
         {view === 'home' && (
           <>
-            <section className="english-hero">
-              <div>
-                <span className="forest-eyebrow">REAL PHOTOS · EVERYDAY ENGLISH</span>
-                <h1>
-                  {profile.name}, 오늘은
-                  <br />
-                  어떤 <em>영어</em>를 써 볼까?
-                </h1>
-                <p>
-                  집과 유치원, 놀이터에서 만나는 영어.
-                  <br />
-                  실제 사진으로 만나고 내 말로 연습해요.
-                </p>
-                <span className="forest-pill">7세 생활 영어 · 사진 단어 {words.length}개</span>
-              </div>
-              <Photo photoId="bus" alt="실제 전기 버스 사진" priority />
-            </section>
-            <section className="run-progress" aria-label="나의 학습 현황">
-              <button
-                className="run-companion"
-                onClick={() => go('card')}
-                aria-label="학습 친구 바꾸기"
-              >
-                <span className="run-companion-face" aria-hidden="true">
-                  {profile.symbol}
-                </span>
-                <span>
-                  나의 학습 친구<small>눌러서 바꿔요</small>
-                </span>
-              </button>
-              <div>
-                <strong>{profile.leaves} P</strong>
-                <span>모은 포인트</span>
-              </div>
-              <div>
-                <strong>
-                  {lastRecords.length} / {words.length}
-                </strong>
-                <span>배운 단어</span>
-              </div>
-            </section>
-            <div className="adventure-portals" aria-label="동화와 게임 모험">
-              <button className="adventure-portal portal-stories" onClick={() => go('stories')}>
-                <StoryScene scene={tales[0].pages[7]} taleId={tales[0].id} pageIndex={7} compact />
-                <div>
-                  <span className="forest-eyebrow">STORY TIME</span>
-                  <h2>두근두근 동화</h2>
-                  <p>친구들과 책 속으로 떠나요</p>
-                  <strong>
-                    동화 {tales.length}편 펼치기
-                    <ArrowRight size={18} />
-                  </strong>
-                </div>
-              </button>
-              <button className="adventure-portal portal-games" onClick={() => go('games')}>
-                <div className="portal-game-art" aria-hidden="true">
-                  <span>🃏</span>
-                  <span>🚂</span>
-                  <span>⭐</span>
-                  <span>🔎</span>
-                </div>
-                <div>
-                  <span className="forest-eyebrow">LET’S PLAY</span>
-                  <h2>와글와글 게임</h2>
-                  <p>듣고, 찾고, 연결하며 놀아요</p>
-                  <strong>
-                    게임 {gameModes.length}종 만나기
-                    <ArrowRight size={18} />
-                  </strong>
-                </div>
-              </button>
-            </div>
+            <AdventureHome
+              name={profile.name}
+              symbol={profile.symbol}
+              points={profile.leaves}
+              learned={lastRecords.length}
+              wordCount={words.length}
+              storyCount={tales.length}
+              gameCount={gameModes.length}
+              records={profile.records}
+              activities={profile.activityRecords}
+              onWord={() => select(words.find((w) => w.id === 'soccer')!)}
+              onStories={() => go('stories')}
+              onGames={() => go('games')}
+              onCard={() => go('card')}
+            />
             <form className="forest-search" onSubmit={searchWord}>
               <Search />
               <input
@@ -516,8 +460,8 @@ export function ForestApp() {
             </div>
             <div className="forest-heading">
               <div>
-                <span className="forest-eyebrow">TODAY'S EXPRESSION</span>
-                <h2>오늘 바로 써 보는 말</h2>
+                <span className="forest-eyebrow">TODAY'S MAGIC WORDS</span>
+                <h2>오늘의 마법 같은 한마디</h2>
               </div>
             </div>
             <section className="english-today">
