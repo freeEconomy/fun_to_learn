@@ -39,6 +39,7 @@ import {
   type AdventureProgress,
   type ActivityId,
 } from '@/lib/forest/adventures';
+import { beginPlaybackSession } from '@/lib/forest/playback-session';
 import { DiscoveryTrail } from './discovery-trail';
 import {
   discoveryPlan,
@@ -178,7 +179,8 @@ export function ForestApp() {
     [draft, setDraft] = useState(initial),
     [saved, setSaved] = useState(false);
   const finished = useRef(false),
-    utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+    utteranceRef = useRef<SpeechSynthesisUtterance | null>(null),
+    releasePlaybackRef = useRef<(() => void) | null>(null);
   const word = words.find((w) => w.id === profile.selected) || words[0],
     quiz = makeQuiz(word),
     question = quiz[index];
@@ -218,12 +220,16 @@ export function ForestApp() {
     return () => {
       utteranceRef.current = null;
       window.speechSynthesis.cancel();
+      releasePlaybackRef.current?.();
+      releasePlaybackRef.current = null;
       window.speechSynthesis.removeEventListener('voiceschanged', sync);
     };
   }, []);
   function stop() {
     utteranceRef.current = null;
     window.speechSynthesis?.cancel();
+    releasePlaybackRef.current?.();
+    releasePlaybackRef.current = null;
     setSpeaking(false);
   }
   useEffect(() => {
@@ -244,6 +250,7 @@ export function ForestApp() {
       return;
     }
     stop();
+    releasePlaybackRef.current = beginPlaybackSession(navigator);
     const u = new SpeechSynthesisUtterance(text);
     u.lang = voice.lang;
     u.voice = voice;
@@ -255,17 +262,26 @@ export function ForestApp() {
     u.onend = () => {
       if (utteranceRef.current === u) {
         utteranceRef.current = null;
+        releasePlaybackRef.current?.();
+        releasePlaybackRef.current = null;
         setSpeaking(false);
       }
     };
     u.onerror = () => {
       if (utteranceRef.current === u) {
         utteranceRef.current = null;
+        releasePlaybackRef.current?.();
+        releasePlaybackRef.current = null;
         setSpeaking(false);
         setNotice('영어 음성을 재생하지 못했어요. 다시 눌러 주세요.');
       }
     };
-    window.speechSynthesis.speak(u);
+    try {
+      window.speechSynthesis.speak(u);
+    } catch {
+      stop();
+      setNotice('영어 음성을 재생하지 못했어요. 다시 눌러 주세요.');
+    }
   }
   function startQuiz() {
     setIndex(0);
@@ -1124,6 +1140,10 @@ export function ForestApp() {
                 저장됩니다.
               </p>
               {listen('Hello. May I sit here, please?', '영어 음성 확인')}
+              <p className="forest-muted">
+                아이폰에서는 듣기를 누르면 지원되는 Safari의 미디어 재생 모드를 요청합니다. 미디어
+                음량을 올려 주세요. iOS 버전에 따라 무음 모드를 해제해야 할 수 있어요.
+              </p>
             </section>
             <section className="forest-panel">
               <h2>다시 연습할 단어</h2>
