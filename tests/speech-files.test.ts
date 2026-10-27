@@ -7,6 +7,7 @@ import { normalizeSpeech } from '../lib/forest/speech-text';
 import { speechAudioSource, canPlaySpeechAudio } from '../lib/forest/speech-audio';
 import index from '../lib/forest/speech-index.json';
 import { speechVoice, speechPlaybackRate } from '../lib/forest/speech-config';
+import neuralVoice from '../scripts/neural-speech/voice.json';
 
 test('every current spoken word, sentence, story and game challenge has a unique real MP3', () => {
   assert.deepEqual(Object.keys(index), speechTexts);
@@ -27,12 +28,17 @@ test('every current spoken word, sentence, story and game challenge has a unique
   assert.equal(normalizeSpeech('  “I  like soccer.”  '), 'I like soccer.');
 });
 test('male voice is consistent on MP3-capable browsers and default playback does not time-stretch it', () => {
-  assert.equal(speechVoice.voice, 'rms');
+  assert.deepEqual(speechVoice, neuralVoice);
+  assert.equal(speechVoice.voice, 'am_michael');
+  assert.match(speechVoice.engine, /Kokoro/);
   assert.equal(speechVoice.gender, 'male');
   assert.equal(speechVoice.bitrate, '96k');
   const meta = JSON.parse(readFileSync('public/speech/voice.json', 'utf8'));
   assert.equal(meta.id, speechVoice.id);
   assert.equal(meta.gender, 'male');
+  assert.equal(meta.engine, speechVoice.engine);
+  assert.equal(meta.voice, speechVoice.voice);
+  assert.equal(meta.clips, speechTexts.length);
   assert.equal(meta.defaultPlaybackRate, 1);
   assert.equal(speechPlaybackRate(0.85), 1);
   assert.equal(speechPlaybackRate(0.65), 0.85);

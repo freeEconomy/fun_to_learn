@@ -1225,7 +1225,7 @@ export function ForestApp() {
               </p>
               {listen('Hello. May I sit here, please?', '영어 음성 확인')}
               <p className="forest-muted">
-                미국식 남성 영어 음성 파일을 재생합니다. 기본 설정은 원래 속도예요. 무음 모드에서도
+                미국식 남성 AI 음성으로 읽어 줍니다. 기본 설정은 원래 속도예요. 무음 모드에서도
                 미디어 음량을 올리고 듣기를 눌러 주세요.
               </p>
             </section>

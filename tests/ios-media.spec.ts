@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import { speechAudioSource } from '../lib/forest/speech-audio';
+import { speechVoice } from '../lib/forest/speech-config';
 
 async function iphone(page: Page, mocked = true) {
   await page.addInitScript((mocked) => {
@@ -168,7 +169,7 @@ test('a real file download failure clears loading and supports retry', async ({ 
     .toBe(true);
 });
 
-test('desktop and Android also select the same male recording at its original speed', async ({
+test('desktop and Android also select the same male neural voice at its original speed', async ({
   page,
 }) => {
   await iphone(page);
@@ -192,18 +193,26 @@ test('old normal speed migrates to the new natural default without losing points
   page,
 }) => {
   await iphone(page);
-  for (const [oldRate, expected] of [
-    [1, 1],
-    [0.85, 1],
-    [0.65, 0.85],
-  ]) {
-    await page.evaluate((rate) => {
-      const p = JSON.parse(localStorage.getItem('wordforest-english-v1')!);
-      p.rate = rate;
-      p.leaves = 30;
-      delete p.audioVoice;
-      localStorage.setItem('wordforest-english-v1', JSON.stringify(p));
-    }, oldRate);
+  for (const [voice, oldRate, expected] of [
+    [undefined, 1, 1],
+    [undefined, 0.85, 1],
+    [undefined, 0.65, 0.85],
+    ['rms-us-male-96k-v2', 1, 1],
+    ['rms-us-male-96k-v2', 0.65, 0.85],
+    [speechVoice.id, 1, 1.1],
+    [speechVoice.id, 0.85, 1],
+    [speechVoice.id, 0.65, 0.85],
+  ] as const) {
+    await page.evaluate(
+      ({ voice, rate }) => {
+        const p = JSON.parse(localStorage.getItem('wordforest-english-v1')!);
+        p.rate = rate;
+        p.leaves = 30;
+        p.audioVoice = voice;
+        localStorage.setItem('wordforest-english-v1', JSON.stringify(p));
+      },
+      { voice, rate: oldRate },
+    );
     await page.reload();
     await expect(page.locator('main')).toHaveAttribute('aria-busy', 'false');
     await page.getByRole('button', { name: '영어 듣기', exact: true }).click();

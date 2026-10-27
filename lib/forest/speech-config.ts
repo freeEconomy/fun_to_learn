@@ -1,7 +1,7 @@
 export const speechVoice = {
-  id: 'rms-us-male-96k-v2',
-  engine: 'CMU Flite',
-  voice: 'rms',
+  id: 'kokoro-v1-michael-fp32-v1',
+  engine: 'Kokoro-82M v1.0 (ONNX fp32)',
+  voice: 'am_michael',
   locale: 'en-US',
   gender: 'male',
   sampleRate: 24000,

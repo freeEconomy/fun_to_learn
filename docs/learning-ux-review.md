@@ -39,10 +39,27 @@
 ```sh
 npm run test:content
 npm run build
-PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm test -- tests/discovery.spec.ts tests/adventure-home.spec.ts tests/forest.spec.ts tests/adventures.spec.ts tests/soccer.spec.ts
+PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm test -- tests/ios-media.spec.ts tests/playback-session.spec.ts tests/discovery.spec.ts tests/adventure-home.spec.ts tests/forest.spec.ts tests/adventures.spec.ts tests/soccer.spec.ts
 npm run format:check
 ```
 
 브라우저 검사는 데스크톱 Chromium과 iPhone 13 크기의 모바일 Chromium에서 수행한다. 실제 iPhone Safari의 음성 품질·음성 설치 상태까지 확인한 것으로 간주하지 않는다. 영어 음성이 없는 경우도 글 힌트로 학습 가능하다. 마이크를 켜거나 녹음·외부 전송·자동 발음 채점을 하지 않는다. 자기 확인 버튼을 실제 발음 평가 기록으로 표시하지 않는다.
 
 탐험 기록은 기존 프로필과 같은 브라우저에 저장한다. 완료일은 최대 365개 보존하며 하루 포인트와 별개의 도장이다. 3단어 탐험은 기존 5문제 퀴즈 완료나 포인트를 대체하지 않는다. 복습 간격은 간단한 추천 규칙이며 학습 효과를 보장하는 평가 모델로 표시하지 않는다.
+
+## 신경망 AI 음성 검증
+
+Kokoro의 미국식 남성 음성으로 1,059개 학습 표현을 생성하고 기존 미디어 재생 경로에 연결한다. MP3 지원 브라우저에서는 미리 생성한 파일을 재생하며 추가 음성 생성 API를 호출하지 않는다. MP3 미지원 브라우저의 기기 읽기 대체 경로도 유지한다.
+
+| ID  | 상황                         | 기대 결과                                                                                     | 자동 검증                    |
+| --- | ---------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------- |
+| A01 | 학습 표현 및 음성 설정       | 모든 표현이 새 버전의 고유 파일과 대응하고 활성 설정·배포 메타데이터가 일치                   | speech-files content         |
+| A02 | 모델 누락 또는 체크섬 오류   | 합성 중단, 기존 설정·색인·모든 음성 파일 보존                                                 | neural-generation content    |
+| A03 | 듣기 탭·대기·실제 재생·종료  | 준비 상태와 읽기 상태 구분, 실제 playing 이후 읽기 표시                                       | ios-media browser            |
+| A04 | 정지·앱 음소거·화면 이동     | 로딩 중에도 재생 취소, 이전 콜백이 새 음성을 중단하지 않음                                    | ios-media + playback-session |
+| A05 | 재생 거절·파일 404           | 재시도 안내, 재시도 후 정상 재생, 과거 요청 오류 무시                                         | ios-media browser            |
+| A06 | 실제 파일 재생·부분 다운로드 | 브라우저 디코딩과 재생 시간 진행, 올바른 MIME 및 HTTP 206 응답                                | ios-media browser            |
+| A07 | 이전 음성에서 업그레이드     | 포인트와 느린 속도 보존, 이전 보통 속도는 새 기본 1배로 전환, 새 음성의 명시적 속도 선택 유지 | ios-media browser            |
+| A08 | 사진 단어·탐험·동화·축구·홈  | 기존 학습·보상·검색·반응형 이동 정상                                                          | learning browser regression  |
+
+생성기는 합성 결과의 유효 샘플·무음 여부와 모든 MP3의 디코딩을 검사한다. 자동 검증은 실제 아이폰 무음 스위치나 사람의 주관적인 발음 품질 평가를 대신하지 않는다. 설치와 재생성 방법은 [AI 음성 생성 안내](neural-speech.md)를 참고한다.
