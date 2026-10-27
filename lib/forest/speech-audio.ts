@@ -5,9 +5,10 @@ export function speechAudioSource(text: string): string | undefined {
   const file = (index as Record<string, string>)[normalizeSpeech(text)];
   return file ? `/speech/${file}` : undefined;
 }
-export function usesMediaNarration(browser: Navigator): boolean {
-  return (
-    /iPhone|iPad|iPod/i.test(browser.userAgent) ||
-    (browser.platform === 'MacIntel' && browser.maxTouchPoints > 1)
-  );
+export function canPlaySpeechAudio(media: HTMLAudioElement | null): boolean {
+  try {
+    return !!media?.canPlayType('audio/mpeg');
+  } catch {
+    return false;
+  }
 }

@@ -69,7 +69,7 @@ test('iPhone words and sentences play MP3 without device voices; reading status 
   await expect(page.getByText('영어를 읽고 있어요.', { exact: false })).toHaveCount(0);
   expect(await page.evaluate(() => (window as any).__plays.at(-1))).toEqual({
     src: speechAudioSource('soccer'),
-    rate: 0.85,
+    rate: 1,
     volume: 1,
     muted: false,
   });
@@ -166,4 +166,48 @@ test('a real file download failure clears loading and supports retry', async ({ 
       page.locator('audio').evaluate((a: HTMLAudioElement) => a.currentTime > 0 && !a.error),
     )
     .toBe(true);
+});
+
+test('desktop and Android also select the same male recording at its original speed', async ({
+  page,
+}) => {
+  await iphone(page);
+  for (const ua of ['Mozilla/5.0 X11 Linux desktop', 'Mozilla/5.0 Linux Android 16']) {
+    await page.evaluate(
+      (ua) => Object.defineProperty(navigator, 'userAgent', { value: ua, configurable: true }),
+      ua,
+    );
+    await page.getByRole('button', { name: '영어 듣기', exact: true }).click();
+    expect(await page.evaluate(() => (window as any).__plays.at(-1))).toEqual({
+      src: speechAudioSource('May I sit here?'),
+      rate: 1,
+      volume: 1,
+      muted: false,
+    });
+  }
+  expect(await page.evaluate(() => (window as any).__nativeCalls)).toBe(0);
+});
+
+test('old normal speed migrates to the new natural default without losing points or the slow preference', async ({
+  page,
+}) => {
+  await iphone(page);
+  for (const [oldRate, expected] of [
+    [1, 1],
+    [0.85, 1],
+    [0.65, 0.85],
+  ]) {
+    await page.evaluate((rate) => {
+      const p = JSON.parse(localStorage.getItem('wordforest-english-v1')!);
+      p.rate = rate;
+      p.leaves = 30;
+      delete p.audioVoice;
+      localStorage.setItem('wordforest-english-v1', JSON.stringify(p));
+    }, oldRate);
+    await page.reload();
+    await expect(page.locator('main')).toHaveAttribute('aria-busy', 'false');
+    await page.getByRole('button', { name: '영어 듣기', exact: true }).click();
+    expect(await page.evaluate(() => (window as any).__plays.at(-1).rate)).toBe(expected);
+    await expect(page.locator('.forest-leaves')).toContainText('30 P');
+  }
 });

@@ -1,0 +1,11 @@
+{
+  "id": "rms-us-male-96k-v2",
+  "engine": "CMU Flite",
+  "voice": "rms",
+  "locale": "en-US",
+  "gender": "male",
+  "sampleRate": 24000,
+  "bitrate": "96k",
+  "clips": 1059,
+  "defaultPlaybackRate": 1
+}

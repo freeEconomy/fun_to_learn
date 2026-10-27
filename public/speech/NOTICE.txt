@@ -1,5 +1,5 @@
-English learning audio generated locally with CMU Flite (female American English SLT voice), FFmpeg and libmp3lame.
-24 kHz mono MP3, 48 kbit/s. No remote TTS requests are made by the app.
+English learning audio generated locally with CMU Flite (male American English RMS voice), FFmpeg and libmp3lame.
+24 kHz mono MP3, 96 kbit/s. No remote TTS requests are made by the app.
 Flite source and voice licensing: https://github.com/festvox/flite
 The following system package copyright and license notices accompany the synthesis engine and voice:
 

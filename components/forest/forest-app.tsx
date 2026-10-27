@@ -39,7 +39,8 @@ import {
   type AdventureProgress,
   type ActivityId,
 } from '@/lib/forest/adventures';
-import { speechAudioSource, usesMediaNarration } from '@/lib/forest/speech-audio';
+import { speechAudioSource, canPlaySpeechAudio } from '@/lib/forest/speech-audio';
+import { speechPlaybackRate, speechVoice } from '@/lib/forest/speech-config';
 import { beginPlaybackSession } from '@/lib/forest/playback-session';
 import { DiscoveryTrail } from './discovery-trail';
 import {
@@ -77,6 +78,7 @@ type LearningRecord = {
   review: boolean;
 };
 type Profile = AdventureProgress & {
+  audioVoice: string;
   discovery: DiscoveryProgress;
   name: string;
   color: string;
@@ -108,6 +110,7 @@ const initial: Profile = {
   symbol: '🐰',
   level: 1,
   rate: 0.85,
+  audioVoice: speechVoice.id,
   goal: 10,
   leaves: 0,
   selected: 'bus',
@@ -134,6 +137,8 @@ function readProfile(raw: unknown): Profile {
   return {
     ...p,
     ...readAdventure(p),
+    audioVoice: speechVoice.id,
+    rate: p.audioVoice === speechVoice.id ? p.rate : p.rate === 0.65 ? 0.65 : 0.85,
     discovery: readDiscovery(p.discovery),
     selected: word.id,
     page: Number.isInteger(p.page) && p.page >= 0 && p.page < word.story.pages.length ? p.page : 0,
@@ -262,7 +267,7 @@ export function ForestApp() {
       setNotice('소리가 꺼져 있어요. 위쪽 소리 버튼을 눌러 주세요.');
       return;
     }
-    if (usesMediaNarration(navigator)) {
+    if (canPlaySpeechAudio(mediaRef.current)) {
       stop();
       const media = mediaRef.current;
       const source = speechAudioSource(text);
@@ -308,7 +313,7 @@ export function ForestApp() {
       media.src = source;
       media.muted = false;
       media.volume = 1;
-      media.playbackRate = profile.rate;
+      media.playbackRate = speechPlaybackRate(profile.rate);
       media.preservesPitch = true;
       setLoadingAudio(true);
       try {
@@ -332,7 +337,7 @@ export function ForestApp() {
     const u = new SpeechSynthesisUtterance(text);
     u.lang = voice.lang;
     u.voice = voice;
-    u.rate = profile.rate;
+    u.rate = speechPlaybackRate(profile.rate);
     utteranceRef.current = u;
     u.onstart = () => {
       if (utteranceRef.current === u) setSpeaking(true);
@@ -1195,9 +1200,9 @@ export function ForestApp() {
                     value={profile.rate}
                     onChange={(e) => setProfile((p) => ({ ...p, rate: Number(e.target.value) }))}
                   >
-                    <option value={0.65}>느리게</option>
-                    <option value={0.85}>기본</option>
-                    <option value={1}>보통 영어 속도</option>
+                    <option value={0.65}>천천히</option>
+                    <option value={0.85}>기본 · 원래 속도</option>
+                    <option value={1}>조금 빠르게</option>
                   </select>
                 </label>
                 <label className="forest-field">
@@ -1220,8 +1225,8 @@ export function ForestApp() {
               </p>
               {listen('Hello. May I sit here, please?', '영어 음성 확인')}
               <p className="forest-muted">
-                아이폰에서는 미리 만든 영어 음성 파일을 재생합니다. 무음 모드에서도 미디어 음량을
-                올리고 듣기를 눌러 주세요.
+                미국식 남성 영어 음성 파일을 재생합니다. 기본 설정은 원래 속도예요. 무음 모드에서도
+                미디어 음량을 올리고 듣기를 눌러 주세요.
               </p>
             </section>
             <section className="forest-panel">
