@@ -11,7 +11,9 @@ test('adventure home shows real progress and all three destinations remain usabl
     .toBe(true);
   await expect(page.getByLabel('오늘 완료한 모험 0개, 전체 3개')).toBeVisible();
   await page.getByRole('button', { name: '오늘의 모험 시작', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'soccer', exact: true })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: '귀 쫑긋! 어떤 사진일까?', exact: true }),
+  ).toBeVisible();
   await page.getByRole('button', { name: '홈', exact: true }).click();
   await page.getByRole('button', { name: '이야기 성 모험 시작', exact: true }).click();
   await expect(page.locator('.tale-cover')).toHaveCount(30);

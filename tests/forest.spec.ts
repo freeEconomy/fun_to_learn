@@ -221,7 +221,25 @@ test('English: legacy Korean records are kept, repeated quiz does not mint point
     }
     await expect(page.locator('.forest-leaves')).toContainText('30 P');
   }
+  await page.evaluate(() => {
+    const p = JSON.parse(localStorage.getItem('wordforest-english-v1')!);
+    p.discovery = {
+      entries: {
+        dog: {
+          last: new Date().toISOString(),
+          due: new Date().toISOString(),
+          streak: 1,
+          needsReview: false,
+        },
+      },
+      days: [new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' })],
+      session: { ids: ['soccer', 'dog', 'apple'], results: [] },
+    };
+    localStorage.setItem('wordforest-english-v1', JSON.stringify(p));
+  });
+  await page.reload();
   await parent(page);
+  await expect(page.getByRole('heading', { name: '3단어 탐험 기록', exact: true })).toBeVisible();
   await page.getByRole('button', { name: '영어 프로필과 기록 삭제' }).click();
   await page.getByRole('button', { name: '취소', exact: true }).click();
   await expect(page.locator('.forest-leaves')).toContainText('30 P');
@@ -229,6 +247,9 @@ test('English: legacy Korean records are kept, repeated quiz does not mint point
   await page.getByRole('button', { name: '영어 기록 삭제', exact: true }).click();
   await page.reload();
   await expect(page.locator('.forest-leaves')).toContainText('0 P');
+  expect(
+    await page.evaluate(() => JSON.parse(localStorage.getItem('wordforest-english-v1')!).discovery),
+  ).toEqual({ entries: {}, days: [], session: null });
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('wordforest-v1')!))).toEqual(
     legacy,
   );

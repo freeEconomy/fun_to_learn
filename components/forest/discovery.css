@@ -1,0 +1,442 @@
+.discovery-dashboard {
+  margin: 0 0 32px;
+  padding: 24px;
+  border: 1px solid #dce6cf;
+  border-radius: 22px;
+  background: #fffdf3;
+  box-shadow: 0 4px 0 #e7eadc;
+}
+.discovery-invitation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.forest-app .discovery-invitation h2 {
+  font-size: 25px;
+  color: #254f43;
+}
+.forest-app .discovery-invitation p {
+  margin: 8px 0 14px;
+  font-size: 13px;
+  color: #697b64;
+}
+.discovery-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.discovery-preview > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 12px;
+  padding: 5px 10px 5px 5px;
+  background: #eff3e6;
+  color: #315b46;
+  font-size: 12px;
+  font-weight: 700;
+}
+.discovery-preview img {
+  border-radius: 8px;
+  object-fit: cover;
+}
+.discovery-invitation > button {
+  flex-shrink: 0;
+  min-height: 48px;
+}
+.discovery-badge-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 25px 0 12px;
+  padding-top: 19px;
+  border-top: 1px dashed #d6dec9;
+}
+.forest-app .discovery-badge-heading h3 {
+  font-size: 16px;
+}
+.discovery-badge-heading > span {
+  font-size: 11px;
+  color: #74816a;
+}
+.discovery-badges {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.discovery-badges li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 8px;
+  border: 1px dashed #d5decc;
+  border-radius: 14px;
+  background: #f4f5ec;
+  color: #67755e;
+  text-align: center;
+}
+.discovery-badges li > span {
+  font-size: 29px;
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+.discovery-badges strong {
+  font-size: 12px;
+}
+.discovery-badges small {
+  font-size: 10px;
+}
+.discovery-badges .unlocked {
+  background: #fff0ba;
+  border: 1px solid #ebce75;
+  color: #6c541e;
+}
+.discovery-badges .unlocked > span {
+  filter: none;
+  opacity: 1;
+}
+.forest-app .discovery-note {
+  margin-top: 16px;
+  color: #6e7b65;
+  font-size: 12px;
+  line-height: 1.9;
+}
+.discovery-trail,
+.discovery-finish {
+  max-width: 950px;
+  margin: 0 auto;
+}
+.discovery-trail > .adventure-back {
+  margin-bottom: 24px;
+  min-height: 44px;
+}
+.discovery-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.discovery-heading p {
+  color: #71806b;
+  font-size: 14px;
+  margin-top: 9px;
+}
+.discovery-steps {
+  display: flex;
+  gap: 10px;
+  margin: 22px 0;
+}
+.discovery-steps > span {
+  display: grid;
+  place-items: center;
+  flex: 1;
+  height: 32px;
+  border-radius: 10px;
+  background: #eaece0;
+  color: #708067;
+  font-size: 13px;
+  font-weight: 800;
+}
+.discovery-steps .done {
+  background: #34775b;
+  color: white;
+}
+.discovery-steps .current {
+  background: #ffe29b;
+  color: #755624;
+  box-shadow: inset 0 0 0 1px #e5c675;
+}
+.discovery-listen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 21px;
+  border: 1px solid #dce6d0;
+  background: #eff5e6;
+  border-radius: 18px;
+  margin-bottom: 22px;
+}
+.discovery-listen > .forest-button:first-child {
+  min-height: 58px;
+  font-size: 18px;
+}
+.forest-app .discovery-word-hint {
+  width: 100%;
+  color: #315e45;
+  font-size: 18px;
+  padding-top: 4px;
+}
+.discovery-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 17px;
+}
+.discovery-options > button {
+  overflow: hidden;
+  min-width: 0;
+  border: 3px solid #e1e7da;
+  border-radius: 19px;
+  background: white;
+  padding: 0;
+  box-shadow: 0 4px 0 #e1e7da;
+  color: #315544;
+}
+.discovery-options .english-photo {
+  margin: 0;
+  aspect-ratio: 1.2;
+  height: auto;
+  border-radius: 0;
+  min-height: 0;
+}
+.discovery-options .english-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.discovery-options button > span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  min-height: 50px;
+  font-weight: 800;
+}
+.discovery-options .retry {
+  border-color: #d9ba65;
+  box-shadow: 0 4px 0 #d9ba65;
+}
+.discovery-options .matched {
+  border-color: #398661;
+  box-shadow: 0 4px 0 #398661;
+  background: #eff8e5;
+}
+.discovery-options > button:disabled {
+  opacity: 1;
+  cursor: default;
+}
+.discovery-options > button:disabled:not(.matched) {
+  opacity: 0.5;
+}
+.discovery-feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 22px 0;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: #fff1ce;
+  color: #74572c;
+  font-size: 14px;
+}
+.discovery-feedback.success {
+  background: #e8f2de;
+  color: #315f40;
+}
+.discovery-feedback strong {
+  font-size: 21px;
+}
+.discovery-say {
+  border: 1px solid #e7dcc0;
+  background: #fffaf0;
+  border-radius: 18px;
+  padding: 23px;
+}
+.discovery-say > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #a27732;
+}
+.forest-app .discovery-say > p {
+  font-size: 27px;
+  font-weight: 800;
+  color: #315943;
+  margin: 12px 0 5px;
+}
+.discovery-say > span {
+  color: #77816d;
+  font-size: 14px;
+}
+.discovery-say .forest-actions {
+  margin: 17px 0 11px;
+}
+.discovery-say small {
+  color: #7b8571;
+  font-size: 11px;
+}
+.discovery-say [aria-pressed='true'] {
+  background: #e0edd2;
+}
+.discovery-next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 23px 0;
+}
+.discovery-next > span {
+  font-size: 12px;
+  color: #738166;
+}
+.discovery-finish {
+  text-align: center;
+  border: 1px solid #e4dfc5;
+  padding: 32px;
+  border-radius: 25px;
+  background: #fffdf2;
+}
+.discovery-medal {
+  display: block;
+  font-size: 65px;
+  margin-bottom: 13px;
+}
+.discovery-finish > p {
+  margin: 14px 0;
+  color: #6b7b60;
+}
+.discovery-results {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 25px 0;
+}
+.discovery-results > button {
+  overflow: hidden;
+  border: 1px solid #e1e7d8;
+  border-radius: 16px;
+  background: white;
+  padding-bottom: 15px;
+}
+.discovery-results .english-photo {
+  aspect-ratio: 1.25;
+  height: auto;
+  margin: 0 0 12px;
+  border-radius: 0;
+}
+.discovery-results .english-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.discovery-results strong,
+.discovery-results small {
+  display: block;
+}
+.discovery-results strong {
+  color: #345d43;
+  font-size: 20px;
+}
+.discovery-results small {
+  color: #718365;
+  font-size: 11px;
+  margin-top: 7px;
+}
+.discovery-finish .forest-actions {
+  justify-content: center;
+  margin-top: 24px;
+}
+@media (max-width: 760px) {
+  .discovery-dashboard {
+    padding: 18px;
+  }
+  .discovery-invitation {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 17px;
+  }
+  .forest-app .discovery-invitation h2 {
+    font-size: 23px;
+  }
+  .discovery-badge-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .discovery-badges {
+    gap: 7px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .discovery-preview > span {
+    font-size: 11px;
+  }
+  .discovery-preview img {
+    width: 34px;
+    height: 34px;
+  }
+  .discovery-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .discovery-heading h1 {
+    font-size: 27px;
+  }
+  .discovery-options {
+    gap: 10px;
+    grid-template-columns: 1fr;
+  }
+  .discovery-options > button {
+    display: flex;
+    align-items: center;
+  }
+  .discovery-options .english-photo {
+    width: 47%;
+    flex-shrink: 0;
+    height: 115px;
+    aspect-ratio: auto;
+  }
+  .discovery-options button > span {
+    flex: 1;
+    padding: 10px;
+    font-size: 20px;
+  }
+  .discovery-listen {
+    padding: 16px;
+  }
+  .discovery-listen .forest-button {
+    width: 100%;
+  }
+  .discovery-next {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .discovery-next > span {
+    text-align: center;
+  }
+  .discovery-say {
+    padding: 18px;
+  }
+  .forest-app .discovery-say > p {
+    font-size: 24px;
+  }
+  .discovery-say .forest-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .discovery-finish {
+    padding: 23px 16px;
+  }
+  .discovery-results {
+    gap: 7px;
+  }
+  .discovery-results strong {
+    font-size: 15px;
+  }
+  .discovery-results small {
+    font-size: 10px;
+    padding: 0 3px;
+  }
+  .discovery-finish .forest-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+.discovery-feedback {
+  scroll-margin-top: 20px;
+}

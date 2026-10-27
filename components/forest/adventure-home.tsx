@@ -1,6 +1,8 @@
 'use client';
 
 import { ArrowRight, BookOpen, Check, Compass, Flag, Gamepad2, Sparkles, Star } from 'lucide-react';
+import { DiscoveryDashboard } from './discovery-dashboard';
+import { type DiscoveryProgress } from '@/lib/forest/discovery';
 import type { ActivityRecord } from '@/lib/forest/adventures';
 
 const day = (date: string) =>
@@ -20,6 +22,9 @@ export function AdventureHome({
   onStories,
   onGames,
   onCard,
+  discovery,
+  plan,
+  onStart,
 }: {
   name: string;
   symbol: string;
@@ -34,10 +39,13 @@ export function AdventureHome({
   onStories: () => void;
   onGames: () => void;
   onCard: () => void;
+  discovery: DiscoveryProgress;
+  plan: string[];
+  onStart: () => void;
 }) {
   const today = day(new Date().toISOString());
   const done = [
-    records.some((r) => day(r.date) === today),
+    discovery.days.includes(today) || records.some((r) => day(r.date) === today),
     activities.some((r) => r.activityId.startsWith('story:') && day(r.date) === today),
     activities.some((r) => r.activityId.startsWith('game:') && day(r.date) === today),
   ];
@@ -101,7 +109,7 @@ export function AdventureHome({
             <br />
             친구들과 듣고, 말하고, 신나게 놀아요.
           </p>
-          <button className="explorer-start" onClick={onWord}>
+          <button className="explorer-start" onClick={onStart}>
             오늘의 모험 시작 <ArrowRight size={20} />
           </button>
           <span className="explorer-hero-note">
@@ -139,6 +147,7 @@ export function AdventureHome({
           <span>발견한 영어 단어</span>
         </div>
       </section>
+      <DiscoveryDashboard progress={discovery} plan={plan} onStart={onStart} />
       <section className="explorer-missions" aria-labelledby="explorer-missions-title">
         <div className="explorer-section-heading">
           <div>
@@ -209,7 +218,8 @@ export function AdventureHome({
           ))}
         </div>
         <p className="explorer-footnote">
-          <Sparkles size={14} /> 오늘의 탐험 표시는 단어 퀴즈·동화·게임을 완료하면 채워져요.
+          <Sparkles size={14} /> 오늘의 탐험 표시는 3단어 탐험 또는 단어 퀴즈·동화·게임을 완료하면
+          채워져요.
         </p>
       </section>
     </>

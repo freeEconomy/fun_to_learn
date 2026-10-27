@@ -39,13 +39,25 @@ import {
   type AdventureProgress,
   type ActivityId,
 } from '@/lib/forest/adventures';
+import { DiscoveryTrail } from './discovery-trail';
+import {
+  discoveryPlan,
+  discoveryReviewIds,
+  emptyDiscovery,
+  finishDiscovery,
+  learningDay,
+  readDiscovery,
+  type DiscoveryProgress,
+} from '@/lib/forest/discovery';
 import { AdventureHome } from './adventure-home';
 import { StoryLibrary } from './adventures/stories';
 import { GameArcade } from './adventures/games';
 import './forest.css';
 import './adventures/adventures.css';
 import './adventure-home.css';
+import './discovery.css';
 type View =
+  | 'discovery'
   | 'home'
   | 'word'
   | 'practice'
@@ -63,6 +75,7 @@ type LearningRecord = {
   review: boolean;
 };
 type Profile = AdventureProgress & {
+  discovery: DiscoveryProgress;
   name: string;
   color: string;
   symbol: string;
@@ -87,6 +100,7 @@ const symbolLabels = [
 ];
 const initial: Profile = {
   ...emptyAdventure,
+  discovery: emptyDiscovery,
   name: '새싹',
   color: colors[0],
   symbol: '🐰',
@@ -118,6 +132,7 @@ function readProfile(raw: unknown): Profile {
   return {
     ...p,
     ...readAdventure(p),
+    discovery: readDiscovery(p.discovery),
     selected: word.id,
     page: Number.isInteger(p.page) && p.page >= 0 && p.page < word.story.pages.length ? p.page : 0,
     records: p.records
@@ -277,6 +292,32 @@ export function ForestApp() {
     setMissing('');
     setSearch('');
   }
+  function startDiscovery() {
+    stop();
+    setProfile((p) => ({
+      ...p,
+      discovery: {
+        ...p.discovery,
+        session: p.discovery.session || { ids: discoveryPlan(p.discovery, p.records), results: [] },
+      },
+    }));
+    setView('discovery');
+    window.scrollTo({ top: 0 });
+  }
+  function advanceDiscovery(id: string, first: boolean) {
+    setProfile((p) => {
+      const session = p.discovery.session;
+      if (!session || session.ids[session.results.length] !== id) return p;
+      const results = [...session.results, { id: session.ids[session.results.length], first }];
+      return {
+        ...p,
+        discovery:
+          results.length === 3
+            ? finishDiscovery(p.discovery, results)
+            : { ...p.discovery, session: { ...session, results } },
+      };
+    });
+  }
   function searchWord(e: React.FormEvent) {
     e.preventDefault();
     const found = findWord(search);
@@ -336,7 +377,12 @@ export function ForestApp() {
     return earned;
   }
   const lastRecords = [...new Map(profile.records.map((r) => [r.word, r])).values()],
-    reviews = lastRecords.filter((r) => r.review);
+    reviews = discoveryReviewIds(profile.discovery, profile.records).map((word) => ({ word }));
+  const discoveryWords = new Set([
+    ...lastRecords.map((r) => r.word),
+    ...Object.keys(profile.discovery.entries),
+  ]);
+  const recommended = discoveryPlan(profile.discovery, profile.records);
   const firstTryCount = answers.filter((answer) => answer.first).length;
   const quizScore = Math.round((firstTryCount / quiz.length) * 100);
   const nav = [
@@ -410,12 +456,15 @@ export function ForestApp() {
               name={profile.name}
               symbol={profile.symbol}
               points={profile.leaves}
-              learned={lastRecords.length}
+              learned={discoveryWords.size}
               wordCount={words.length}
               storyCount={tales.length}
               gameCount={gameModes.length}
               records={profile.records}
               activities={profile.activityRecords}
+              discovery={profile.discovery}
+              plan={recommended}
+              onStart={startDiscovery}
               onWord={() => select(words.find((w) => w.id === 'soccer')!)}
               onStories={() => go('stories')}
               onGames={() => go('games')}
@@ -633,6 +682,18 @@ export function ForestApp() {
               </button>
             </div>
           </>
+        )}
+        {view === 'discovery' && (
+          <DiscoveryTrail
+            session={profile.discovery.session}
+            speak={speak}
+            stop={stop}
+            onAdvance={advanceDiscovery}
+            days={profile.discovery.days.length}
+            onHome={() => go('home')}
+            onAgain={startDiscovery}
+            onWord={(id) => select(words.find((w) => w.id === id)!)}
+          />
         )}
         {view === 'stories' && (
           <StoryLibrary
@@ -884,6 +945,12 @@ export function ForestApp() {
               ))}
             </div>
             <div className="forest-actions">
+              <button className="forest-button" onClick={startDiscovery}>
+                사진으로 3단어 탐험하기 <ArrowRight size={17} />
+              </button>
+              <button className="forest-button secondary" onClick={() => go('home')}>
+                모험 지도로 돌아가기
+              </button>
               <button className="forest-button secondary" onClick={() => go('word')}>
                 다시 연습하기
               </button>
@@ -912,7 +979,7 @@ export function ForestApp() {
                 </span>
                 <small>FUN TO RUN</small>
                 <h2>{draft.name || '새싹'}</h2>
-                <p>{lastRecords.length} words practiced</p>
+                <p>{discoveryWords.size} words practiced</p>
               </section>
               <section className="forest-customize-options">
                 <label className="forest-field">
@@ -999,8 +1066,8 @@ export function ForestApp() {
             </p>
             <div className="forest-parent-stats">
               <section>
-                <strong>{lastRecords.length}</strong>
-                <span>연습한 사진 단어</span>
+                <strong>{discoveryWords.size}</strong>
+                <span>발견한 사진 단어</span>
               </section>
               <section>
                 <strong>{reviews.length}</strong>
@@ -1071,7 +1138,9 @@ export function ForestApp() {
                     );
                   })
                 ) : (
-                  <p className="forest-muted">퀴즈를 풀면 복습할 단어가 표시돼요.</p>
+                  <p className="forest-muted">
+                    3단어 탐험이나 퀴즈를 풀면 다시 만날 단어를 추천해요.
+                  </p>
                 )}
               </div>
             </section>
@@ -1097,6 +1166,28 @@ export function ForestApp() {
               ) : (
                 <p className="forest-muted">아직 학습 기록이 없어요.</p>
               )}
+            </section>
+            <section className="forest-panel">
+              <h2>3단어 탐험 기록</h2>
+              <p>
+                발견한 단어 {Object.keys(profile.discovery.entries).length}개 · 완료한 날{' '}
+                {profile.discovery.days.length}일
+              </p>
+              <p>
+                다시 만날 단어:{' '}
+                {Object.entries(profile.discovery.entries)
+                  .filter(
+                    ([, entry]) =>
+                      entry.needsReview ||
+                      learningDay(entry.due) <= learningDay(new Date().toISOString()),
+                  )
+                  .map(([id]) => words.find((w) => w.id === id)!.name)
+                  .join(', ') || '아직 없어요'}
+              </p>
+              <small>
+                탐험의 정답과 오답 기록으로 복습을 추천합니다. 말하기 버튼은 아이의 자기 확인이며
+                발음 평가 결과가 아닙니다.
+              </small>
             </section>
             <section className="forest-panel">
               <h2>동화와 게임 기록</h2>
