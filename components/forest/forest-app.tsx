@@ -39,6 +39,7 @@ import {
   type AdventureProgress,
   type ActivityId,
 } from '@/lib/forest/adventures';
+import { speechAudioSource, usesMediaNarration } from '@/lib/forest/speech-audio';
 import { beginPlaybackSession } from '@/lib/forest/playback-session';
 import { DiscoveryTrail } from './discovery-trail';
 import {
@@ -164,6 +165,7 @@ export function ForestApp() {
     [focus, setFocus] = useState('');
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]),
     [speaking, setSpeaking] = useState(false),
+    [loadingAudio, setLoadingAudio] = useState(false),
     [sound, setSound] = useState(true);
   const [index, setIndex] = useState(0),
     [choice, setChoice] = useState(''),
@@ -180,7 +182,9 @@ export function ForestApp() {
     [saved, setSaved] = useState(false);
   const finished = useRef(false),
     utteranceRef = useRef<SpeechSynthesisUtterance | null>(null),
-    releasePlaybackRef = useRef<(() => void) | null>(null);
+    releasePlaybackRef = useRef<(() => void) | null>(null),
+    mediaRef = useRef<HTMLAudioElement>(null),
+    mediaRequestRef = useRef(0);
   const word = words.find((w) => w.id === profile.selected) || words[0],
     quiz = makeQuiz(word),
     question = quiz[index];
@@ -225,7 +229,24 @@ export function ForestApp() {
       window.speechSynthesis.removeEventListener('voiceschanged', sync);
     };
   }, []);
+  useEffect(() => {
+    const media = mediaRef.current;
+    return () => {
+      mediaRequestRef.current++;
+      media?.pause();
+      releasePlaybackRef.current?.();
+      releasePlaybackRef.current = null;
+    };
+  }, []);
   function stop() {
+    mediaRequestRef.current++;
+    const media = mediaRef.current;
+    if (media) {
+      media.pause();
+      media.removeAttribute('src');
+      media.load();
+    }
+    setLoadingAudio(false);
     utteranceRef.current = null;
     window.speechSynthesis?.cancel();
     releasePlaybackRef.current?.();
@@ -239,6 +260,63 @@ export function ForestApp() {
   function speak(text: string) {
     if (!sound) {
       setNotice('소리가 꺼져 있어요. 위쪽 소리 버튼을 눌러 주세요.');
+      return;
+    }
+    if (usesMediaNarration(navigator)) {
+      stop();
+      const media = mediaRef.current;
+      const source = speechAudioSource(text);
+      if (!media || !source) {
+        setNotice('이 음성 파일을 찾지 못했어요. 사이트를 새로고침해 주세요.');
+        return;
+      }
+      const request = ++mediaRequestRef.current;
+      const current = () => request === mediaRequestRef.current;
+      const failed = () => {
+        if (!current()) return;
+        stop();
+        setNotice(
+          '음성 파일을 재생하지 못했어요. 연결과 미디어 음량을 확인하고 듣기를 다시 눌러 주세요.',
+        );
+      };
+      releasePlaybackRef.current = beginPlaybackSession(navigator);
+      media.onplaying = () => {
+        if (current()) {
+          setLoadingAudio(false);
+          setSpeaking(true);
+          setNotice((message) =>
+            message.startsWith('음성 파일을 재생하지 못했어요.') ? '' : message,
+          );
+        }
+      };
+      media.onwaiting = () => {
+        if (current()) {
+          setLoadingAudio(true);
+          setSpeaking(false);
+        }
+      };
+      media.onpause = () => {
+        if (current()) {
+          setSpeaking(false);
+          setLoadingAudio(false);
+        }
+      };
+      media.onended = () => {
+        if (current()) stop();
+      };
+      media.onerror = failed;
+      media.src = source;
+      media.muted = false;
+      media.volume = 1;
+      media.playbackRate = profile.rate;
+      media.preservesPitch = true;
+      setLoadingAudio(true);
+      try {
+        const pending = media.play();
+        pending?.catch(failed);
+      } catch {
+        failed();
+      }
       return;
     }
     const voice =
@@ -416,6 +494,7 @@ export function ForestApp() {
   );
   return (
     <div className="forest-app english-app">
+      <audio ref={mediaRef} data-learning-audio preload="none" aria-hidden="true" />
       <header className="forest-header">
         <button className="forest-brand" aria-label="Fun To Run 홈" onClick={() => go('home')}>
           <BookOpen />
@@ -1141,8 +1220,8 @@ export function ForestApp() {
               </p>
               {listen('Hello. May I sit here, please?', '영어 음성 확인')}
               <p className="forest-muted">
-                아이폰에서는 듣기를 누르면 지원되는 Safari의 미디어 재생 모드를 요청합니다. 미디어
-                음량을 올려 주세요. iOS 버전에 따라 무음 모드를 해제해야 할 수 있어요.
+                아이폰에서는 미리 만든 영어 음성 파일을 재생합니다. 무음 모드에서도 미디어 음량을
+                올리고 듣기를 눌러 주세요.
               </p>
             </section>
             <section className="forest-panel">
@@ -1272,9 +1351,9 @@ export function ForestApp() {
             </section>
           </>
         )}
-        {speaking && (
+        {(speaking || loadingAudio) && (
           <p className="english-speaking" role="status">
-            영어를 읽고 있어요.
+            {loadingAudio ? '음성을 준비하고 있어요.' : '영어를 읽고 있어요.'}
             <button aria-label="영어 읽기 멈춤" onClick={stop}>
               <VolumeX size={17} />
             </button>

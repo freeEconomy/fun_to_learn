@@ -1,5 +1,16 @@
 import { test, expect, type Page } from '@playwright/test';
 
+// These cases exercise the non-iOS device voice fallback, even at mobile viewport sizes.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'userAgent', {
+      value: 'Learning test desktop',
+      configurable: true,
+    });
+    Object.defineProperty(navigator, 'platform', { value: 'Linux', configurable: true });
+  });
+});
+
 async function answer(page: Page, miss = false) {
   const hint = page.getByRole('button', { name: '힌트 보기', exact: true });
   if (await hint.count()) await hint.click();

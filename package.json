@@ -15,7 +15,8 @@
     "check:services": "tsx scripts/check-services.ts",
     "storage:cleanup": "tsx scripts/cleanup-storage.ts",
     "db:import-sqlite": "tsx scripts/import-sqlite.ts",
-    "test:content": "tsx --test tests/forest-content.test.ts tests/discovery.test.ts"
+    "test:content": "tsx --test tests/forest-content.test.ts tests/discovery.test.ts tests/speech-files.test.ts",
+    "audio:generate": "tsx scripts/generate-speech.ts"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.0",

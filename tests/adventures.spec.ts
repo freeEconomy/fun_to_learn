@@ -1,4 +1,15 @@
 import { test, expect, type Page } from '@playwright/test';
+
+// These cases exercise the non-iOS device voice fallback, even at mobile viewport sizes.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'userAgent', {
+      value: 'Learning test desktop',
+      configurable: true,
+    });
+    Object.defineProperty(navigator, 'platform', { value: 'Linux', configurable: true });
+  });
+});
 import { tales } from '../lib/forest/adventures';
 import { words } from '../lib/forest/content';
 
