@@ -37,7 +37,8 @@ test('soccer supports saves, five goals, keyboard play, daily rewards and restor
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/');
   await page.getByRole('button', { name: '게임', exact: true }).click();
-  await expect(page.locator('.game-tile')).toHaveCount(4);
+  await expect(page.locator('.game-tile')).toHaveCount(7);
+  await page.getByRole('radio', { name: /연습 모드/ }).check();
   await page.getByRole('button', { name: '영어 골! 축구 챌린지 시작' }).click();
   await expect(page.getByRole('button', { name: '슛! 골 넣기', exact: true })).toBeDisabled();
   for (let round = 0; round < 5; round++) {

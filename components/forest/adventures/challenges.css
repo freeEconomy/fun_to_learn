@@ -1,0 +1,448 @@
+.game-levels {
+  display: flex;
+  gap: 12px;
+  border: 0;
+  padding: 0;
+  margin: 24px 0;
+}
+.word-quest button {
+  min-height: 44px;
+}
+.memory-card {
+  width: 100%;
+}
+.game-levels legend {
+  margin-bottom: 12px;
+  font-weight: 800;
+  color: #365a44;
+}
+.game-levels label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 17px 20px;
+  border: 2px solid #e0e6d7;
+  border-radius: 18px;
+  background: #fffef9;
+  cursor: pointer;
+}
+.game-levels label.chosen {
+  border-color: #568b68;
+  background: #eaf3e2;
+  box-shadow: 0 3px 0 #d1e1c9;
+}
+.game-levels input {
+  width: 20px;
+  height: 20px;
+  accent-color: #397057;
+  flex-shrink: 0;
+}
+.game-levels span {
+  font-weight: 800;
+  color: #335741;
+}
+.game-levels small {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #63715b;
+}
+.game-level-detail {
+  grid-column: 2;
+  display: block;
+  color: #385b46;
+  font-size: 12px;
+  font-weight: 800;
+  margin-top: 12px;
+  line-height: 1.6;
+}
+.game-level-banner,
+.challenge-tip {
+  border-radius: 12px;
+  background: #eaf2df;
+  padding: 12px 16px;
+  color: #3a6245;
+  font-size: 13px;
+  line-height: 1.7;
+  text-align: center;
+  margin: 12px auto 22px;
+  max-width: 900px;
+}
+.listening-options.four-options {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.quest-clue {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  align-items: center;
+  margin: 26px 0;
+}
+.quest-clue .english-photo {
+  width: 160px;
+  height: 150px;
+  flex-shrink: 0;
+  border-radius: 20px;
+}
+.quest-clue h2 {
+  color: #345742;
+  font-size: 28px;
+  margin: 8px 0;
+}
+.quest-clue p {
+  color: #75816c;
+  line-height: 1.6;
+}
+.letter-slots,
+.letter-bank {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 24px 0;
+}
+.letter-slots {
+  padding: 20px 12px;
+  border-radius: 18px;
+  background: #f4eef8;
+}
+.letter-slots button,
+.letter-slots > span,
+.letter-bank button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #a8bca1;
+  border-radius: 12px;
+  width: 52px;
+  min-height: 54px;
+  font-size: 26px;
+  font-weight: 800;
+  background: #f1f6e9;
+  color: #3d6547;
+  text-transform: uppercase;
+}
+.letter-slots button {
+  background: #e7d8f4;
+  border-color: #ba9bcf;
+  color: #61467b;
+}
+.letter-slots > span {
+  background: #faf7fc;
+  border-style: dashed;
+  color: #bba8ca;
+  border-color: #d4c4e2;
+}
+.letter-bank button {
+  box-shadow: 0 3px 0 #a7bda0;
+}
+.letter-bank button:disabled {
+  opacity: 0.3;
+  box-shadow: none;
+}
+.quest-hint {
+  padding: 12px;
+  background: #fff4d6;
+  border-radius: 12px;
+  line-height: 1.7;
+  color: #776037;
+}
+.quest-actions {
+  margin-top: 24px;
+  justify-content: center;
+}
+.delivery-parcel {
+  position: relative;
+  max-width: 420px;
+  margin: 28px auto 24px;
+  padding: 26px 18px;
+  border: 2px solid #d6b879;
+  border-radius: 18px;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 46%, #edcf99 46% 54%, transparent 54% 100%),
+    #fff2d7;
+}
+.parcel-stamp {
+  display: inline-block;
+  padding: 7px 10px;
+  background: #fffdf6;
+  color: #8b6938;
+  border: 1px dashed #c3a26d;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  font-size: 10px;
+}
+.delivery-parcel h2 {
+  color: #644c2c;
+  font-size: clamp(26px, 5vw, 38px);
+  overflow-wrap: anywhere;
+  margin: 18px 0;
+}
+.parcel-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 15px 0;
+  color: #506b45;
+}
+.parcel-hint .english-photo {
+  width: 100px;
+  height: 75px;
+  border-radius: 12px;
+}
+.delivery-shops,
+.sequence-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 24px 0;
+}
+.delivery-shops button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  border: 2px solid #d9e2cd;
+  border-radius: 18px;
+  background: #f4f8ed;
+  padding: 18px 10px;
+  min-width: 0;
+  color: #365945;
+}
+.delivery-shops button > span {
+  font-size: 36px;
+}
+.delivery-shops small {
+  color: #78876a;
+}
+.delivery-shops button.correct {
+  border-color: #4c895e;
+  background: #dfefd9;
+}
+.quest-heading {
+  padding: 22px 0 10px;
+}
+.quest-heading > span {
+  font-size: 46px;
+}
+.quest-heading h2 {
+  color: #325d4a;
+  font-size: 24px;
+  line-height: 1.6;
+  margin: 10px 0;
+}
+.quest-heading p {
+  color: #75836e;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.sequence-study {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 28px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.sequence-study li {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: #f0f7ec;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid #d8e5cd;
+}
+.sequence-number {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #35654f;
+  color: #fff;
+  font-weight: 800;
+  z-index: 1;
+}
+.sequence-study .english-photo {
+  width: 100%;
+  height: 120px;
+  border-radius: 12px;
+}
+.sequence-study strong {
+  font-size: 18px;
+  color: #3a6350;
+  overflow-wrap: anywhere;
+}
+.sequence-study small {
+  color: #76866e;
+}
+.sequence-study .forest-button {
+  min-height: 44px;
+  padding: 10px 8px;
+  font-size: 13px;
+}
+.sequence-slots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+  padding: 14px;
+  gap: 8px;
+  background: #e8f1eb;
+  border-radius: 16px;
+  margin: 18px 0;
+}
+.sequence-slots li > button,
+.sequence-slots li > span {
+  min-width: 80px;
+  min-height: 58px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 2px dashed #a9c1b0;
+  background: #f7fbf5;
+  color: #3d6652;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-size: 14px;
+}
+.sequence-slots li > button {
+  background: #cbe1ce;
+  border-style: solid;
+}
+.sequence-slots b {
+  font-size: 11px;
+  color: #6a8a76;
+}
+.sequence-options {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.sequence-options button {
+  min-width: 0;
+  overflow: hidden;
+  border: 2px solid #dce7d5;
+  border-radius: 14px;
+  background: #fff;
+  padding-bottom: 10px;
+  color: #3b604d;
+}
+.sequence-options button:disabled {
+  opacity: 0.4;
+}
+.sequence-options .english-photo {
+  width: 100%;
+  height: 105px;
+  border-radius: 0;
+}
+.sequence-options strong,
+.sequence-options small {
+  display: block;
+  margin: 8px 5px 0;
+  overflow-wrap: anywhere;
+}
+.sequence-options small {
+  font-size: 11px;
+  color: #7e8b75;
+}
+.word-quest button:focus-visible,
+.game-levels label:focus-within {
+  outline: 3px solid #bb812e;
+  outline-offset: 4px;
+}
+@media (max-width: 540px) {
+  .challenge-memory .memory-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .game-tile-emoji {
+    grid-row: 1 / 7;
+  }
+  .game-levels {
+    gap: 8px;
+  }
+  .game-levels label {
+    padding: 12px 10px;
+    gap: 7px;
+  }
+  .game-levels span {
+    font-size: 13px;
+  }
+  .game-levels small {
+    font-size: 10px;
+    line-height: 1.5;
+  }
+  .listening-options.four-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .quest-clue {
+    gap: 14px;
+  }
+  .quest-clue .english-photo {
+    width: 100px;
+    height: 115px;
+  }
+  .quest-clue h2 {
+    font-size: 23px;
+  }
+  .quest-clue p {
+    font-size: 12px;
+  }
+  .quest-clue .forest-button {
+    padding: 10px;
+    font-size: 12px;
+  }
+  .letter-slots,
+  .letter-bank {
+    gap: 6px;
+  }
+  .letter-slots button,
+  .letter-slots > span,
+  .letter-bank button {
+    width: 44px;
+    min-height: 46px;
+    font-size: 23px;
+  }
+  .quest-heading h2 {
+    font-size: 20px;
+  }
+  .sequence-study {
+    gap: 8px;
+  }
+  .sequence-study li {
+    padding: 8px;
+  }
+  .sequence-study .english-photo {
+    height: 90px;
+  }
+  .sequence-study .forest-button {
+    font-size: 11px;
+    width: 100%;
+    gap: 3px;
+  }
+  .sequence-study strong {
+    font-size: 15px;
+  }
+  .sequence-options {
+    gap: 8px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .sequence-options .english-photo {
+    height: 95px;
+  }
+  .delivery-shops {
+    gap: 9px;
+  }
+  .delivery-shops strong {
+    font-size: 14px;
+  }
+}

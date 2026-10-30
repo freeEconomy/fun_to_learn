@@ -11,6 +11,7 @@ import { words } from '../lib/forest/content';
 
 async function openGame(page: Page, name: string) {
   await page.getByRole('button', { name: '게임', exact: true }).click();
+  await page.getByRole('radio', { name: /연습 모드/ }).check();
   await page.getByRole('button', { name: `${name} 시작`, exact: true }).click();
 }
 async function matchAll(page: Page) {
@@ -283,6 +284,7 @@ test('sentence train accepts keyboard play, correction and five complete sentenc
 }) => {
   await page.goto('/');
   await page.getByRole('button', { name: '게임', exact: true }).click();
+  await page.getByRole('radio', { name: /연습 모드/ }).check();
   const start = page.getByRole('button', { name: '문장 기차 시작', exact: true });
   await start.focus();
   await page.keyboard.press('Enter');

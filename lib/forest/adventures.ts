@@ -705,7 +705,7 @@ export const gameModes = [
   {
     id: 'soccer',
     title: '영어 골! 축구 챌린지',
-    subtitle: '영어로 패스하고 슛! 다섯 골에 도전해요',
+    subtitle: '비슷한 영어 작전을 구별하고 골을 넣어요',
     emoji: '⚽',
     tag: '축구 + 생활 영어',
     color: '#d8eddf',
@@ -733,6 +733,30 @@ export const gameModes = [
     emoji: '🚂',
     tag: '문장 + 순서',
     color: '#fbe5d2',
+  },
+  {
+    id: 'spell',
+    title: '알파벳 공방',
+    subtitle: '사진 속 단어를 알파벳으로 조립해요',
+    emoji: '🔤',
+    tag: '철자 + 단어',
+    color: '#eee4f7',
+  },
+  {
+    id: 'delivery',
+    title: '단어 배달부',
+    subtitle: '영어 꾸러미를 알맞은 가게로 배달해요',
+    emoji: '📦',
+    tag: '뜻 이해 + 분류',
+    color: '#fff0d5',
+  },
+  {
+    id: 'sequence',
+    title: '순서 기억 탐험',
+    subtitle: '단어 지도를 기억하고 같은 순서로 찾아요',
+    emoji: '🧭',
+    tag: '듣기 + 순서 기억',
+    color: '#dff0ed',
   },
 ] as const;
 export type GameId = (typeof gameModes)[number]['id'];

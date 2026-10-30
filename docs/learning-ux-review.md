@@ -32,14 +32,14 @@
 | D11 | 영어 음성이 없음·키보드·320px            | 단어/번역 힌트로 학습 가능, 가로 넘침 없음, 탐험 조작 높이 44px 이상      | browser                                         |
 | D12 | 영어 음성이 있음                         | en-US 낱말·해당 문장 재생, 다음 단어/화면 이동 시 정지                    | browser mock                                    |
 | D13 | 영어 프로필 초기화                       | 신규 탐험·복습·배지·이어 하기 함께 삭제, 이전 한글 기록 유지              | forest browser                                  |
-| D14 | 기존 기능                                | 40개 고유 사진·30권 모든 본문·4개 게임·검색·퀴즈·보상·캐릭터 정상         | 기존 content/forest/adventures/soccer 회귀 검사 |
+| D14 | 기존 기능                                | 40개 고유 사진·30권 모든 본문·7개 게임·검색·퀴즈·보상·캐릭터 정상         | 기존 content/forest/adventures/soccer 회귀 검사 |
 
 ## 실행
 
 ```sh
 npm run test:content
 npm run build
-PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm test -- tests/ios-media.spec.ts tests/playback-session.spec.ts tests/discovery.spec.ts tests/adventure-home.spec.ts tests/forest.spec.ts tests/adventures.spec.ts tests/soccer.spec.ts
+PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm test -- tests/ios-media.spec.ts tests/playback-session.spec.ts tests/discovery.spec.ts tests/adventure-home.spec.ts tests/forest.spec.ts tests/adventures.spec.ts tests/soccer.spec.ts tests/game-challenges.spec.ts
 npm run format:check
 ```
 
@@ -63,3 +63,20 @@ Kokoro의 미국식 남성 음성으로 1,059개 학습 표현을 생성하고 �
 | A08 | 사진 단어·탐험·동화·축구·홈  | 기존 학습·보상·검색·반응형 이동 정상                                                          | learning browser regression  |
 
 생성기는 합성 결과의 유효 샘플·무음 여부와 모든 MP3의 디코딩을 검사한다. 자동 검증은 실제 아이폰 무음 스위치나 사람의 주관적인 발음 품질 평가를 대신하지 않는다. 설치와 재생성 방법은 [AI 음성 생성 안내](neural-speech.md)를 참고한다.
+
+## 게임 난이도와 새 게임 검증
+
+기본값은 도전 모드이며 연습 모드로 이전 규칙을 선택할 수 있다. 난이도별 문제 수와 학습 목적은 [게임 규칙](wordforest.md)에 정리했다. 전체 7종의 최고 기록과 일일 보상은 이전 프로필과 호환된다.
+
+| ID  | 상황                          | 기대 결과                                                                 | 자동 검증               |
+| --- | ----------------------------- | ------------------------------------------------------------------------- | ----------------------- |
+| G01 | 기본 도전·연습 전환           | 7개 메뉴, 카드 6쌍·4쌍, 도전에서도 모든 짝을 찾아야 완료                  | game-challenges browser |
+| G02 | 듣기·문장·축구의 도전 모드    | 듣기 보기 4개·6문제, 문장 6개와 남는 낱말 1개, 축구 유사 표현과 6골       | unit + browser          |
+| G03 | 알파벳 공방 오답·반복 글자    | 남는 글자 2개, 같은 글자는 별도 카드, 글자 취소·힌트·재도전 가능          | unit + browser          |
+| G04 | 단어 배달부                   | 영어부터 보고 4곳 중 하나로 배달, 선택적 사진 힌트, 오답 후 재선택        | unit + browser          |
+| G05 | 순서 기억 탐험                | 공부한 지도는 가려짐, 3→4단어 기억, 다시 보기·순서 수정·완주              | unit + browser          |
+| G06 | 연습·소리 끄기                | 사진으로 배달, 2→3단어 기억, 오디오 없이도 완료 가능                      | browser                 |
+| G07 | 연속 탭·난이도 전환·다시 하기 | 라운드 건너뛰기 없음, 50~100점, 같은 게임 보상 하루 한 번, 최고 기록 보존 | unit + browser          |
+| G08 | 320px·키보드·AI 음성          | 가로 넘침 없음, 조작 버튼 높이 44px 이상, 기존 AI 파일 재생, 이동 시 정지 | browser + screenshot    |
+
+무작위 문제 생성기는 두 난이도를 반복 생성해 정답 유일성·보기 중복·진행 단계·기존 AI 음성 파일 대응을 확인한다. 실제 아이폰 무음 스위치 조작과 주관적인 난이도 평가는 원격 브라우저 테스트에 포함되지 않는다.

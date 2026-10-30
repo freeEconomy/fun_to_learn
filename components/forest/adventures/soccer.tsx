@@ -2,52 +2,47 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { ArrowRight, Lightbulb, RotateCcw, Volume2 } from 'lucide-react';
-import { shuffle } from '@/lib/forest/adventures';
+import { soccerRounds, gameScore } from '@/lib/forest/game-challenges';
+import type { PlayProps } from './game-shared';
 import './soccer.css';
-import { soccerChallenges as challenges } from '@/lib/forest/soccer-content';
 
-export function SoccerGame({
-  speak,
-  stop,
-  onFinish,
-}: {
-  speak: (text: string) => void;
-  stop: () => void;
-  onFinish: (score: number) => void;
-}) {
-  const [rounds] = useState(() =>
-    shuffle(challenges)
-      .slice(0, 5)
-      .map((r) => ({ ...r, options: shuffle([r.answer, ...r.others]) })),
-  );
+export function SoccerGame({ speak, stop, onFinish, level }: PlayProps) {
+  const [rounds] = useState(() => soccerRounds(level));
   const [round, setRound] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [shot, setShot] = useState<'ready' | 'goal' | 'save'>('ready');
   const [missed, setMissed] = useState(false);
-  const [bonus, setBonus] = useState(0);
+  const [firstGoals, setFirstGoals] = useState(0);
   const [hint, setHint] = useState(false);
+  const shooting = useRef(false);
+  const advancing = useRef(false);
   const action = useRef<HTMLButtonElement>(null);
   const pitch = useRef<HTMLDivElement>(null);
   const coach = useRef<HTMLDivElement>(null);
   const current = rounds[round];
   const goals = round + (shot === 'goal' ? 1 : 0);
   useEffect(() => {
+    advancing.current = false;
+    if (shot === 'ready') shooting.current = false;
     if (shot !== 'ready') action.current?.focus({ preventScroll: true });
-  }, [shot]);
+  }, [shot, round]);
 
   function shoot() {
-    if (selected === null || shot !== 'ready') return;
+    if (selected === null || shot !== 'ready' || shooting.current) return;
+    shooting.current = true;
     stop();
     pitch.current?.scrollIntoView({ block: 'center', behavior: 'instant' });
     if (current.options[selected] === current.answer) {
       setShot('goal');
-      if (!missed) setBonus((n) => n + 10);
+      if (!missed) setFirstGoals((n) => n + 1);
     } else {
       setShot('save');
       setMissed(true);
     }
   }
   function advance() {
+    if (shot === 'ready' || advancing.current) return;
+    advancing.current = true;
     stop();
     if (shot === 'save') {
       coach.current?.scrollIntoView({ block: 'start', behavior: 'instant' });
@@ -55,7 +50,7 @@ export function SoccerGame({
       setSelected(null);
       setHint(true);
     } else if (round === rounds.length - 1) {
-      onFinish(50 + bonus);
+      onFinish(gameScore(firstGoals, rounds.length));
     } else {
       coach.current?.scrollIntoView({ block: 'start', behavior: 'instant' });
       setRound((n) => n + 1);
@@ -73,9 +68,9 @@ export function SoccerGame({
           <small>FUN TO RUN FC</small>
           <strong>영어 골 챌린지</strong>
         </div>
-        <div className="soccer-score" aria-label={`${goals}골, 목표 5골`}>
+        <div className="soccer-score" aria-label={`${goals}골, 목표 ${rounds.length}골`}>
           <b>{goals}</b>
-          <span>/ 5 GOALS</span>
+          <span>/ {rounds.length} GOALS</span>
         </div>
         <ol aria-label="골 기록">
           {rounds.map((_, i) => (
@@ -209,7 +204,9 @@ export function SoccerGame({
       </div>
       <div className="soccer-coach" ref={coach}>
         <div>
-          <span className="forest-eyebrow">MISSION {round + 1} / 5</span>
+          <span className="forest-eyebrow">
+            MISSION {round + 1} / {rounds.length}
+          </span>
           <h2>{current.korean}</h2>
           <p>친구에게 영어로 어떻게 말할까?</p>
         </div>
@@ -243,7 +240,7 @@ export function SoccerGame({
             <strong>골! {current.answer}</strong>
             <span>
               {current.korean} ·{' '}
-              {missed ? '끝까지 도전해서 성공했어요!' : '첫 슛 성공! 보너스 +10점'}
+              {missed ? '끝까지 도전해서 성공했어요!' : '첫 슛 성공! 정답 보너스 획득'}
             </span>
           </>
         ) : shot === 'save' ? (
@@ -276,7 +273,8 @@ export function SoccerGame({
         )}
       </div>
       <p className="soccer-rule">
-        5골을 넣으면 경기 완료 · 완주 50점 + 첫 슛 성공마다 10점 · 하루 첫 경기 완료 +10 P
+        {rounds.length}골을 넣으면 경기 완료 · 완주 50점 + 첫 슛 정답 보너스 최대 50점 · 하루 첫
+        경기 완료 +10 P
       </p>
     </section>
   );

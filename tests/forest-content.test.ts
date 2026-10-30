@@ -121,7 +121,7 @@ test('thirty classic adaptations have provenance, bilingual scenes and relevant 
   }
   assert.equal(coverHashes.size, tales.length);
   assert.equal(sceneHashes.size, 240);
-  assert.equal(gameModes.length, 4);
+  assert.equal(gameModes.length, 7);
   assert.ok(gameWordIds.every((id) => words.some((w) => w.id === id)));
   assert.equal(trainRounds.length, 5);
   for (const round of trainRounds) {

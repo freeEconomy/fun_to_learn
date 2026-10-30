@@ -19,7 +19,7 @@ test('adventure home shows real progress and all three destinations remain usabl
   await expect(page.locator('.tale-cover')).toHaveCount(30);
   await page.getByRole('button', { name: '홈', exact: true }).click();
   await page.getByRole('button', { name: '챔피언 경기장 모험 시작', exact: true }).click();
-  await expect(page.locator('.game-tile')).toHaveCount(4);
+  await expect(page.locator('.game-tile')).toHaveCount(7);
   await page.evaluate(() => {
     const p = JSON.parse(localStorage.getItem('wordforest-english-v1')!);
     p.name = '도윤';

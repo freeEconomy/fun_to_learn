@@ -15,7 +15,7 @@
     "check:services": "tsx scripts/check-services.ts",
     "storage:cleanup": "tsx scripts/cleanup-storage.ts",
     "db:import-sqlite": "tsx scripts/import-sqlite.ts",
-    "test:content": "tsx --test tests/forest-content.test.ts tests/discovery.test.ts tests/speech-files.test.ts tests/neural-generation.test.ts",
+    "test:content": "tsx --test tests/forest-content.test.ts tests/discovery.test.ts tests/speech-files.test.ts tests/neural-generation.test.ts tests/game-challenges.test.ts",
     "audio:generate": "tsx scripts/generate-speech.ts",
     "audio:generate:neural": "tsx scripts/generate-neural-speech.ts"
   },

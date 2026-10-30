@@ -1,10 +1,22 @@
 'use client';
 import { SoccerGame } from './soccer';
-import { useRef, useState } from 'react';
+import { QuestGame } from './word-quests';
+import { GameProgress, type PlayProps } from './game-shared';
+import {
+  gameSettings,
+  gameDescriptions,
+  gameScore,
+  memoryWords,
+  listeningRounds,
+  sentenceRounds,
+  sentenceTokens,
+  type GameLevel,
+} from '@/lib/forest/game-challenges';
+import './challenges.css';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Check, Gamepad2, Lightbulb, RotateCcw, Volume2 } from 'lucide-react';
 import {
   gameModes,
-  gameWordIds,
   shuffle,
   trainRounds,
   type GameId,
@@ -15,42 +27,9 @@ import { words } from '@/lib/forest/content';
 import { Photo } from '../photo';
 import { AdventureComplete, AdventureHeading, SpeakButton } from './shared';
 const wordFor = (id: string) => words.find((word) => word.id === id)!;
-type PlayProps = {
-  speak: (text: string) => void;
-  stop: () => void;
-  onFinish: (score: number) => void;
-};
-
-function GameProgress({
-  current,
-  total,
-  label,
-}: {
-  current: number;
-  total: number;
-  label: string;
-}) {
-  return (
-    <div className="game-progress">
-      <span>{label}</span>
-      <strong>
-        {current} / {total}
-      </strong>
-      <div
-        role="progressbar"
-        aria-label={label}
-        aria-valuenow={current}
-        aria-valuemin={0}
-        aria-valuemax={total}
-      >
-        <i style={{ width: `${(current / total) * 100}%` }} />
-      </div>
-    </div>
-  );
-}
-function MemoryGame({ speak, onFinish }: PlayProps) {
+function MemoryGame({ speak, onFinish, level }: PlayProps) {
   const [deck] = useState(() => {
-    const picked = shuffle(gameWordIds).slice(0, 4);
+    const picked = memoryWords(level);
     return shuffle(
       picked.flatMap((wordId) => [
         { id: `${wordId}-photo`, wordId, kind: 'photo' as const },
@@ -78,7 +57,7 @@ function MemoryGame({ speak, onFinish }: PlayProps) {
       setMatched(next);
       setFlipped([]);
       setFeedback(`짝을 찾았어요! ${wordFor(card.wordId).name} · ${wordFor(card.wordId).korean}`);
-      if (next.length === 4) onFinish(Math.max(50, 100 - mistakes * 10));
+      if (next.length === gameSettings[level].pairs) onFinish(Math.max(50, 100 - mistakes * 10));
     } else {
       setFlipped([...flipped, id]);
       setMistakes((n) => n + 1);
@@ -86,8 +65,8 @@ function MemoryGame({ speak, onFinish }: PlayProps) {
     }
   }
   return (
-    <div className="game-board memory-board">
-      <GameProgress current={matched.length} total={4} label="찾은 짝꿍" />
+    <div className={`game-board memory-board${level === 'challenge' ? ' challenge-memory' : ''}`}>
+      <GameProgress current={matched.length} total={gameSettings[level].pairs} label="찾은 짝꿍" />
       <p className="game-instruction">사진 카드와 영어 카드가 만나면 짝꿍!</p>
       <div className="memory-grid">
         {deck.map((card, i) => {
@@ -150,15 +129,10 @@ function MemoryGame({ speak, onFinish }: PlayProps) {
     </div>
   );
 }
-function ListeningGame({ speak, stop, onFinish }: PlayProps) {
-  const [rounds] = useState(() =>
-    shuffle(gameWordIds)
-      .slice(0, 5)
-      .map((id) => ({
-        target: wordFor(id),
-        options: shuffle([id, ...shuffle(gameWordIds.filter((other) => other !== id)).slice(0, 2)]),
-      })),
-  );
+function ListeningGame({ speak, stop, onFinish, level }: PlayProps) {
+  const [rounds] = useState(() => listeningRounds(level));
+  const advancing = useRef(false);
+  const answered = useRef(false);
   const [round, setRound] = useState(0),
     [solved, setSolved] = useState(false),
     [mistake, setMistake] = useState(false),
@@ -166,9 +140,14 @@ function ListeningGame({ speak, stop, onFinish }: PlayProps) {
     [hint, setHint] = useState(false),
     [feedback, setFeedback] = useState('영어 소리를 듣고 사진을 골라 주세요.');
   const question = rounds[round];
+  useEffect(() => {
+    advancing.current = false;
+    answered.current = false;
+  }, [round]);
   function choose(id: string) {
-    if (solved) return;
+    if (solved || answered.current) return;
     if (id === question.target.id) {
+      answered.current = true;
       setSolved(true);
       if (!mistake) setCorrect((c) => c + 1);
       setFeedback(`찾았어요! ${question.target.name}는 ${question.target.korean}예요.`);
@@ -178,9 +157,11 @@ function ListeningGame({ speak, stop, onFinish }: PlayProps) {
     }
   }
   function next() {
+    if (!solved || advancing.current) return;
+    advancing.current = true;
     stop();
-    if (round === 4) {
-      onFinish(50 + correct * 10);
+    if (round === rounds.length - 1) {
+      onFinish(gameScore(correct, rounds.length));
       return;
     }
     window.scrollTo({ top: 0 });
@@ -192,7 +173,7 @@ function ListeningGame({ speak, stop, onFinish }: PlayProps) {
   }
   return (
     <div className="game-board listening-board">
-      <GameProgress current={round + 1} total={5} label="소리 보물" />
+      <GameProgress current={round + 1} total={rounds.length} label="소리 보물" />
       <div className="sound-treasure">
         <span aria-hidden="true">🔎</span>
         <button className="sound-play" onClick={() => speak(question.target.name)}>
@@ -210,7 +191,7 @@ function ListeningGame({ speak, stop, onFinish }: PlayProps) {
         )}
         <small>소리가 안 나면 단어 힌트로도 놀 수 있어요.</small>
       </div>
-      <div className="listening-options">
+      <div className={`listening-options${level === 'challenge' ? ' four-options' : ''}`}>
         {question.options.map((id) => {
           const word = wordFor(id);
           return (
@@ -232,7 +213,7 @@ function ListeningGame({ speak, stop, onFinish }: PlayProps) {
         {feedback}
       </p>
       <button className="forest-button" disabled={!solved} onClick={next}>
-        {round === 4 ? '보물상자 열기' : '다음 소리'}
+        {round === rounds.length - 1 ? '보물상자 열기' : '다음 소리'}
         <ArrowRight size={18} />
       </button>
     </div>
@@ -242,16 +223,20 @@ function SentenceRound({
   index,
   onNext,
   speak,
+  target,
+  total,
+  level,
 }: {
   index: number;
+  target: (typeof trainRounds)[number];
+  total: number;
+  level: GameLevel;
   onNext: (first: boolean) => void;
   speak: (text: string) => void;
 }) {
-  const target = trainRounds[index],
-    word = wordFor(target.wordId);
-  const [tokens] = useState(() =>
-    shuffle(target.english.split(' ').map((text, id) => ({ id, text }))),
-  );
+  const word = wordFor(target.wordId);
+  const needed = target.english.split(' ').length;
+  const [tokens] = useState(() => sentenceTokens(target.english, level));
   const [selected, setSelected] = useState<number[]>([]),
     [solved, setSolved] = useState(false),
     [mistake, setMistake] = useState(false),
@@ -268,7 +253,7 @@ function SentenceRound({
   }
   return (
     <>
-      <GameProgress current={index + 1} total={trainRounds.length} label="문장 여행" />
+      <GameProgress current={index + 1} total={total} label="문장 여행" />
       <div className="sentence-clue">
         <Photo photoId={word.photoId} alt={`${word.korean} 참고 사진`} />
         <div>
@@ -277,6 +262,9 @@ function SentenceRound({
           <SpeakButton text={target.english} speak={speak} label="문장 힌트 듣기" />
         </div>
       </div>
+      {level === 'challenge' && (
+        <p className="challenge-tip">필요 없는 낱말이 하나 있어요. {needed}칸만 연결해요!</p>
+      )}
       <div className="sentence-track" aria-label="만든 문장">
         <span className="train-engine" aria-hidden="true">
           🚂
@@ -293,7 +281,7 @@ function SentenceRound({
             {tokens.find((t) => t.id === id)!.text}
           </button>
         ))}
-        {Array.from({ length: tokens.length - selected.length }, (_, i) => (
+        {Array.from({ length: needed - selected.length }, (_, i) => (
           <span className="train-empty" key={i} aria-hidden="true">
             ···
           </span>
@@ -304,9 +292,11 @@ function SentenceRound({
           <button
             key={token.id}
             data-position={token.id}
-            disabled={selected.includes(token.id) || solved}
+            disabled={selected.includes(token.id) || solved || selected.length >= needed}
             onClick={() =>
-              setSelected((ids) => (ids.includes(token.id) ? ids : [...ids, token.id]))
+              setSelected((ids) =>
+                ids.includes(token.id) || ids.length >= needed ? ids : [...ids, token.id],
+              )
             }
             aria-label={`${token.text} 넣기`}
             lang="en"
@@ -331,11 +321,7 @@ function SentenceRound({
               <RotateCcw size={17} />
               다시 만들기
             </button>
-            <button
-              className="forest-button"
-              disabled={selected.length !== tokens.length}
-              onClick={check}
-            >
+            <button className="forest-button" disabled={selected.length !== needed} onClick={check}>
               문장 확인
               <Check size={18} />
             </button>
@@ -344,7 +330,7 @@ function SentenceRound({
           <>
             <SpeakButton text={target.english} speak={speak} label="완성 문장 듣기" />
             <button className="forest-button" onClick={() => onNext(!mistake)}>
-              {index === trainRounds.length - 1 ? '여행 마치기' : '다음 역으로'}
+              {index === total - 1 ? '여행 마치기' : '다음 역으로'}
               <ArrowRight size={18} />
             </button>
           </>
@@ -353,19 +339,29 @@ function SentenceRound({
     </>
   );
 }
-function TrainGame({ speak, stop, onFinish }: PlayProps) {
+function TrainGame({ speak, stop, onFinish, level }: PlayProps) {
+  const [rounds] = useState(() => sentenceRounds(level));
+  const advancing = useRef(false);
   const [round, setRound] = useState(0),
     [correct, setCorrect] = useState(0);
+  useEffect(() => {
+    advancing.current = false;
+  }, [round]);
   return (
     <div className="game-board sentence-board">
       <SentenceRound
         key={round}
         index={round}
+        target={rounds[round]}
+        total={rounds.length}
+        level={level}
         speak={speak}
         onNext={(first) => {
+          if (advancing.current) return;
+          advancing.current = true;
           stop();
           const count = correct + (first ? 1 : 0);
-          if (round === trainRounds.length - 1) onFinish(50 + count * 10);
+          if (round === rounds.length - 1) onFinish(gameScore(count, rounds.length));
           else {
             setCorrect(count);
             window.scrollTo({ top: 0 });
@@ -387,6 +383,7 @@ export function GameArcade({
   stop: () => void;
   onComplete: (id: ActivityId, score: number) => number;
 }) {
+  const [level, setLevel] = useState<GameLevel>('challenge');
   const [selected, setSelected] = useState<GameId | null>(null),
     [run, setRun] = useState(0),
     [result, setResult] = useState<{ score: number; earned: number } | null>(null);
@@ -418,10 +415,33 @@ export function GameArcade({
           <span aria-hidden="true">🏕️</span>
           <div>
             <h2>오늘은 어떤 모험을 할까?</h2>
-            <p>영어 골에 도전하고, 카드도 뒤집고, 문장 기차도 출발!</p>
+            <p>더 커진 도전! 알파벳 조립부터 단어 배달, 기억 탐험까지.</p>
             <small>제한시간 없이 · 포인트 차감 없이 · 키보드로도 플레이</small>
           </div>
         </div>
+        <fieldset className="game-levels">
+          <legend>오늘의 난이도</legend>
+          {(['practice', 'challenge'] as const).map((value) => (
+            <label key={value} className={level === value ? 'chosen' : ''}>
+              <input
+                type="radio"
+                name="game-level"
+                value={value}
+                checked={level === value}
+                onChange={() => {
+                  stop();
+                  setLevel(value);
+                }}
+              />
+              <span>
+                {value === 'challenge' ? '도전 모드' : '연습 모드'}
+                <small>
+                  {value === 'challenge' ? '한 단계 더 생각해 봐요' : '익숙한 규칙부터 차근차근'}
+                </small>
+              </span>
+            </label>
+          ))}
+        </fieldset>
         <div className="game-menu">
           {gameModes.map((game) => {
             const records = progress.activityRecords.filter(
@@ -449,6 +469,7 @@ export function GameArcade({
                 <span className="tale-badge">{game.tag}</span>
                 <h2>{game.title}</h2>
                 <p>{game.subtitle}</p>
+                <span className="game-level-detail">{gameDescriptions[game.id][level]}</span>
                 <small>{best === null ? '처음 떠나는 모험' : `최고 기록 ${best}점`}</small>
                 <strong>
                   놀러 가기
@@ -462,7 +483,8 @@ export function GameArcade({
           <Gamepad2 size={22} />
           <span>
             끝까지 도전하면 기본 50점! 게임마다 첫 시도 정답 보너스를 모아 최고 기록에 도전해요.
-            오늘 처음 마친 게임에는 10포인트도 받아요.
+            오늘 처음 마친 게임에는 10포인트도 받아요. 난이도를 바꿔도 같은 게임의 하루 선물은 한
+            번이에요.
           </span>
         </div>
       </>
@@ -476,6 +498,9 @@ export function GameArcade({
         onBack={back}
         backLabel="게임 놀이터"
       />
+      <p className="game-level-banner">
+        {level === 'challenge' ? '도전 모드' : '연습 모드'} · {gameDescriptions[mode.id][level]}
+      </p>
       {result ? (
         <AdventureComplete
           title="오늘의 모험 성공!"
@@ -490,13 +515,22 @@ export function GameArcade({
           onBack={back}
         />
       ) : selected === 'soccer' ? (
-        <SoccerGame key={run} speak={speak} stop={stop} onFinish={finish} />
+        <SoccerGame key={run} level={level} speak={speak} stop={stop} onFinish={finish} />
       ) : selected === 'memory' ? (
-        <MemoryGame key={run} speak={speak} stop={stop} onFinish={finish} />
+        <MemoryGame key={run} level={level} speak={speak} stop={stop} onFinish={finish} />
       ) : selected === 'listen' ? (
-        <ListeningGame key={run} speak={speak} stop={stop} onFinish={finish} />
+        <ListeningGame key={run} level={level} speak={speak} stop={stop} onFinish={finish} />
+      ) : selected === 'train' ? (
+        <TrainGame key={run} level={level} speak={speak} stop={stop} onFinish={finish} />
       ) : (
-        <TrainGame key={run} speak={speak} stop={stop} onFinish={finish} />
+        <QuestGame
+          key={`${run}-${selected}`}
+          kind={selected! as 'spell' | 'delivery' | 'sequence'}
+          level={level}
+          speak={speak}
+          stop={stop}
+          onFinish={finish}
+        />
       )}
     </>
   );
