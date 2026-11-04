@@ -1,5 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { speechAudioSource } from '../lib/forest/speech-audio';
+import { dailyPhotoWords } from '../lib/forest/daily-learning';
+const todayWord = dailyPhotoWords()[0];
 import { speechVoice } from '../lib/forest/speech-config';
 
 async function iphone(page: Page, mocked = true) {
@@ -63,22 +65,25 @@ test('iPhone words and sentences play MP3 without device voices; reading status 
   expect(await page.evaluate(() => (window as any).__plays.length)).toBe(0);
   await page.getByRole('button', { name: '오늘의 모험 시작', exact: true }).click();
   await page.getByRole('button', { name: '영어 소리 듣기', exact: true }).click();
-  await expect(page.locator('audio')).toHaveAttribute('src', speechAudioSource('soccer')!);
+  await expect(page.locator('audio')).toHaveAttribute('src', speechAudioSource(todayWord.name)!);
   await expect(
     page.getByRole('status').filter({ hasText: '음성을 준비하고 있어요.' }),
   ).toBeVisible();
   await expect(page.getByText('영어를 읽고 있어요.', { exact: false })).toHaveCount(0);
   expect(await page.evaluate(() => (window as any).__plays.at(-1))).toEqual({
-    src: speechAudioSource('soccer'),
+    src: speechAudioSource(todayWord.name),
     rate: 1,
     volume: 1,
     muted: false,
   });
   await playing(page);
   await expect(page.getByRole('status').filter({ hasText: '영어를 읽고 있어요.' })).toBeVisible();
-  await page.getByRole('button', { name: '축구 사진 선택', exact: true }).click();
+  await page.getByRole('button', { name: `${todayWord.korean} 사진 선택`, exact: true }).click();
   await page.getByRole('button', { name: '따라 말할 문장 듣기', exact: true }).click();
-  await expect(page.locator('audio')).toHaveAttribute('src', speechAudioSource('I like soccer.')!);
+  await expect(page.locator('audio')).toHaveAttribute(
+    'src',
+    speechAudioSource(todayWord.sentences[0])!,
+  );
   await playing(page);
   await page.locator('audio').evaluate((a) => a.dispatchEvent(new Event('waiting')));
   await expect(
@@ -138,14 +143,14 @@ test('real MP3 bytes decode and advance in the browser without speech synthesis'
   await iphone(page, false);
   await page.getByRole('button', { name: '영어 듣기', exact: true }).click();
   const media = page.locator('audio');
-  await expect(media).toHaveAttribute('src', speechAudioSource('May I sit here?')!);
+  await expect(media).toHaveAttribute('src', speechAudioSource(todayWord.sentences[0])!);
   await expect
     .poll(() =>
       media.evaluate((a: HTMLAudioElement) => a.currentTime > 0 && a.duration > 0 && !a.error),
     )
     .toBe(true);
   expect(await page.evaluate(() => (window as any).__nativeCalls)).toBe(0);
-  const response = await page.request.get(speechAudioSource('May I sit here?')!, {
+  const response = await page.request.get(speechAudioSource(todayWord.sentences[0])!, {
     headers: { Range: 'bytes=0-511' },
   });
   expect(response.status()).toBe(206);
@@ -180,7 +185,7 @@ test('desktop and Android also select the same male neural voice at its original
     );
     await page.getByRole('button', { name: '영어 듣기', exact: true }).click();
     expect(await page.evaluate(() => (window as any).__plays.at(-1))).toEqual({
-      src: speechAudioSource('May I sit here?'),
+      src: speechAudioSource(todayWord.sentences[0]),
       rate: 1,
       volume: 1,
       muted: false,

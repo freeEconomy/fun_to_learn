@@ -31,6 +31,13 @@ export function GameProgress({
       >
         <i style={{ width: `${(current / total) * 100}%` }} />
       </div>
+      <ol className="arena-steps" aria-hidden="true">
+        {Array.from({ length: total }, (_, n) => (
+          <li key={n} className={n < current ? 'lit' : ''}>
+            {n + 1}
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }

@@ -43,8 +43,20 @@ import { speechAudioSource, canPlaySpeechAudio } from '@/lib/forest/speech-audio
 import { speechPlaybackRate, speechVoice } from '@/lib/forest/speech-config';
 import { beginPlaybackSession } from '@/lib/forest/playback-session';
 import { DiscoveryTrail } from './discovery-trail';
+import { DailyPhotos } from './daily-photos';
+import { useLearningDay } from './use-learning-day';
+import { dailyPhotoWords } from '@/lib/forest/daily-learning';
+import { CharacterMark } from './character-mark';
+import {
+  characters,
+  characterFor,
+  legacySymbols,
+  legacyLabels,
+  isValidSymbol,
+} from '@/lib/forest/characters';
 import {
   discoveryPlan,
+  currentDiscoverySession,
   discoveryReviewIds,
   emptyDiscovery,
   finishDiscovery,
@@ -63,6 +75,7 @@ type View =
   | 'discovery'
   | 'home'
   | 'word'
+  | 'photos'
   | 'practice'
   | 'quiz'
   | 'result'
@@ -93,21 +106,12 @@ type Profile = AdventureProgress & {
 };
 const storageKey = 'wordforest-english-v1';
 const colors = ['#dcebdc', '#e7e2f3', '#fae9cd'];
-const symbols = ['📘', '🧭', '✏️', '🐶', '🐱', '🐰'];
-const symbolLabels = [
-  '책 표식',
-  '나침반 표식',
-  '연필 표식',
-  '강아지 캐릭터',
-  '고양이 캐릭터',
-  '토끼 캐릭터',
-];
 const initial: Profile = {
   ...emptyAdventure,
   discovery: emptyDiscovery,
   name: '새싹',
   color: colors[0],
-  symbol: '🐰',
+  symbol: 'pikachu',
   level: 1,
   rate: 0.85,
   audioVoice: speechVoice.id,
@@ -124,7 +128,7 @@ function readProfile(raw: unknown): Profile {
     typeof p.name !== 'string' ||
     p.name.length > 8 ||
     !colors.includes(p.color) ||
-    !symbols.includes(p.symbol) ||
+    !isValidSymbol(p.symbol) ||
     ![0, 1, 2].includes(p.level) ||
     ![0.65, 0.85, 1].includes(p.rate) ||
     ![5, 10, 15, 20].includes(p.goal) ||
@@ -158,6 +162,8 @@ function readProfile(raw: unknown): Profile {
   };
 }
 export function ForestApp() {
+  const [day, refreshDay] = useLearningDay();
+  const [showAllWords, setShowAllWords] = useState(false);
   const [profile, setProfile] = useState(initial),
     [ready, setReady] = useState(false),
     [view, setView] = useState<View>('home'),
@@ -375,10 +381,12 @@ export function ForestApp() {
     finished.current = false;
   }
   function go(next: View) {
+    refreshDay();
     stop();
     setView(next);
     setMissing('');
     setSaved(false);
+    if (next === 'photos') setShowAllWords(false);
     if (next === 'quiz') startQuiz();
     if (next === 'card') setDraft(profile);
   }
@@ -392,12 +400,18 @@ export function ForestApp() {
     setSearch('');
   }
   function startDiscovery() {
+    refreshDay();
     stop();
+    const now = new Date().toISOString();
     setProfile((p) => ({
       ...p,
       discovery: {
         ...p.discovery,
-        session: p.discovery.session || { ids: discoveryPlan(p.discovery, p.records), results: [] },
+        session: currentDiscoverySession(p.discovery, now) || {
+          ids: discoveryPlan(p.discovery, p.records, now),
+          results: [],
+          day: learningDay(now),
+        },
       },
     }));
     setView('discovery');
@@ -481,7 +495,14 @@ export function ForestApp() {
     ...lastRecords.map((r) => r.word),
     ...Object.keys(profile.discovery.entries),
   ]);
-  const recommended = discoveryPlan(profile.discovery, profile.records);
+  const recommended = day ? discoveryPlan(profile.discovery, profile.records, day) : [];
+  const featured = day ? dailyPhotoWords(day) : [];
+  const todayWord = featured[0] || words[0];
+  const homeDiscovery = {
+    ...profile.discovery,
+    session: day ? currentDiscoverySession(profile.discovery, day) : null,
+  };
+  const partner = characterFor(draft.symbol);
   const firstTryCount = answers.filter((answer) => answer.first).length;
   const quizScore = Math.round((firstTryCount / quiz.length) * 100);
   const nav = [
@@ -537,7 +558,7 @@ export function ForestApp() {
         </div>
       )}
       <main className={`forest-main${view === 'home' ? ' explorer-home' : ''}`} aria-busy={!ready}>
-        {['home', 'word', 'practice', 'quiz', 'result'].includes(view) && (
+        {['home', 'photos', 'word', 'practice', 'quiz', 'result'].includes(view) && (
           <nav className="lesson-shortcuts" aria-label="생활 영어 빠른 연습">
             <span>내 말로 연습해요</span>
             <button onClick={() => go('practice')}>
@@ -550,26 +571,52 @@ export function ForestApp() {
             </button>
           </nav>
         )}
-        {view === 'home' && (
+        {(view === 'home' || view === 'photos') && (
           <>
-            <AdventureHome
-              name={profile.name}
-              symbol={profile.symbol}
-              points={profile.leaves}
-              learned={discoveryWords.size}
-              wordCount={words.length}
-              storyCount={tales.length}
-              gameCount={gameModes.length}
-              records={profile.records}
-              activities={profile.activityRecords}
-              discovery={profile.discovery}
-              plan={recommended}
-              onStart={startDiscovery}
-              onWord={() => select(words.find((w) => w.id === 'soccer')!)}
-              onStories={() => go('stories')}
-              onGames={() => go('games')}
-              onCard={() => go('card')}
-            />
+            {view === 'home' && (
+              <AdventureHome
+                name={profile.name}
+                symbol={profile.symbol}
+                points={profile.leaves}
+                learned={discoveryWords.size}
+                wordCount={words.length}
+                storyCount={tales.length}
+                gameCount={gameModes.length}
+                records={profile.records}
+                activities={profile.activityRecords}
+                discovery={homeDiscovery}
+                plan={recommended}
+                photoWord={day ? todayWord : undefined}
+                onStart={startDiscovery}
+                onWord={() => go('photos')}
+                onStories={() => go('stories')}
+                onGames={() => go('games')}
+                onCard={() => go('card')}
+              />
+            )}
+            {view === 'photos' && (
+              <div className="forest-heading">
+                <div>
+                  <span className="forest-eyebrow">YOUR DAILY PHOTO SAFARI</span>
+                  <h1>사진 단어 탐험</h1>
+                  <p>매일 새로운 사진 단어와 영어 한마디를 만나요.</p>
+                </div>
+              </div>
+            )}
+            {day && <DailyPhotos day={day} onWord={select} />}
+            {reviews.length > 0 && (
+              <div className="daily-review-links">
+                <span>다시 만나볼 단어</span>
+                {reviews.slice(0, 3).map(({ word: id }) => {
+                  const w = words.find((item) => item.id === id)!;
+                  return (
+                    <button key={w.id} onClick={() => select(w)} lang="en">
+                      {w.name}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
             <form className="forest-search" onSubmit={searchWord}>
               <Search />
               <input
@@ -598,10 +645,9 @@ export function ForestApp() {
             )}
             <div className="forest-quick">
               <span>바로 만나기</span>
-              {['soccer', 'slide', 'apple', 'dog'].map((id) => {
-                const w = words.find((w) => w.id === id)!;
+              {featured.slice(0, 4).map((w) => {
                 return (
-                  <button key={id} onClick={() => select(w)} lang="en">
+                  <button key={w.id} onClick={() => select(w)} lang="en">
                     {w.name}
                   </button>
                 );
@@ -614,54 +660,67 @@ export function ForestApp() {
               </div>
             </div>
             <section className="english-today">
-              <span lang="en">May I sit here?</span>
-              <p>여기 앉아도 될까요?</p>
+              <span lang="en">{todayWord.sentences[0]}</span>
+              <p>{todayWord.translations[0]}</p>
               <div className="forest-actions">
-                {listen('May I sit here?')}
-                <button
-                  className="forest-button"
-                  onClick={() => select(words.find((w) => w.id === 'chair')!)}
-                >
-                  chair 배우기 <ArrowRight size={18} />
+                {listen(todayWord.sentences[0])}
+                <button className="forest-button" onClick={() => select(todayWord)}>
+                  {todayWord.name} 배우기 <ArrowRight size={18} />
                 </button>
               </div>
             </section>
-            <div className="forest-heading">
-              <div>
-                <h2>내 생활 속 영어</h2>
-                <p>운동과 놀이, 맛있는 음식과 동물까지 함께 배워요.</p>
-              </div>
-              <span className="forest-muted">실제 사진 · 짧은 생활 문장</span>
-            </div>
-            <div className="forest-category-tabs">
-              {categories.map((c) => (
+            {view === 'photos' && (
+              <div className="photo-catalog-toggle">
                 <button
-                  key={c}
-                  className={category === c ? 'selected' : ''}
-                  aria-pressed={category === c}
-                  onClick={() => setCategory(c)}
+                  className="forest-button secondary"
+                  aria-expanded={showAllWords}
+                  onClick={() => setShowAllWords((value) => !value)}
                 >
-                  {c === '전체' ? '모두 보기' : c}
+                  {showAllWords ? '전체 목록 접기' : `전체 ${words.length}개 단어 보기`}
+                  <BookOpen size={17} />
                 </button>
-              ))}
-            </div>
-            <div className="english-word-grid">
-              {words
-                .filter((w) => category === '전체' || w.category === category)
-                .map((w) => (
-                  <button className="english-word-card" key={w.id} onClick={() => select(w)}>
-                    <Photo photoId={w.photoId} alt={`${w.korean} 실사 사진`} />
-                    <div>
-                      <strong lang="en">{w.name}</strong>
-                      <span>{w.korean}</span>
-                      <small>
-                        {w.category}
-                        {lastRecords.some((r) => r.word === w.id) && ' · 연습 완료 ✓'}
-                      </small>
-                    </div>
-                  </button>
-                ))}
-            </div>
+              </div>
+            )}
+            {(view === 'home' || showAllWords) && (
+              <>
+                <div className="forest-heading">
+                  <div>
+                    <h2>내 생활 속 영어</h2>
+                    <p>운동과 놀이, 맛있는 음식과 동물까지 함께 배워요.</p>
+                  </div>
+                  <span className="forest-muted">실제 사진 · 짧은 생활 문장</span>
+                </div>
+                <div className="forest-category-tabs">
+                  {categories.map((c) => (
+                    <button
+                      key={c}
+                      className={category === c ? 'selected' : ''}
+                      aria-pressed={category === c}
+                      onClick={() => setCategory(c)}
+                    >
+                      {c === '전체' ? '모두 보기' : c}
+                    </button>
+                  ))}
+                </div>
+                <div className="english-word-grid">
+                  {words
+                    .filter((w) => category === '전체' || w.category === category)
+                    .map((w) => (
+                      <button className="english-word-card" key={w.id} onClick={() => select(w)}>
+                        <Photo photoId={w.photoId} alt={`${w.korean} 실사 사진`} />
+                        <div>
+                          <strong lang="en">{w.name}</strong>
+                          <span>{w.korean}</span>
+                          <small>
+                            {w.category}
+                            {lastRecords.some((r) => r.word === w.id) && ' · 연습 완료 ✓'}
+                          </small>
+                        </div>
+                      </button>
+                    ))}
+                </div>
+              </>
+            )}
             <section className="forest-continue">
               <BookOpen />
               <div>
@@ -808,7 +867,13 @@ export function ForestApp() {
           />
         )}
         {view === 'games' && (
-          <GameArcade progress={profile} speak={speak} stop={stop} onComplete={completeAdventure} />
+          <GameArcade
+            symbol={profile.symbol}
+            progress={profile}
+            speak={speak}
+            stop={stop}
+            onComplete={completeAdventure}
+          />
         )}
         {view === 'practice' && (
           <>
@@ -1074,9 +1139,14 @@ export function ForestApp() {
             </div>
             <div className="forest-customize">
               <section className="english-card-preview" style={{ background: draft.color }}>
-                <span role="img" aria-label={symbolLabels[symbols.indexOf(draft.symbol)]}>
-                  {draft.symbol}
-                </span>
+                <span className="card-partner-type">MY ADVENTURE PARTNER</span>
+                <CharacterMark symbol={draft.symbol} />
+                {partner && (
+                  <>
+                    <strong className="card-partner-name">{partner.name}</strong>
+                    <span className="card-partner-type">{partner.type}</span>
+                  </>
+                )}
                 <small>FUN TO RUN</small>
                 <h2>{draft.name || '새싹'}</h2>
                 <p>{discoveryWords.size} words practiced</p>
@@ -1111,23 +1181,46 @@ export function ForestApp() {
                     </button>
                   ))}
                 </div>
-                <h3>학습 친구와 카드 표식</h3>
-                <div className="forest-option-row">
-                  {symbols.map((symbol, i) => (
+                <h3>나의 포켓몬 파트너</h3>
+                <p className="forest-muted">
+                  멋진 친구를 골라 봐요. 모두 포인트 없이 선택할 수 있어요.
+                </p>
+                <div className="character-picker">
+                  {characters.map((character) => (
                     <button
-                      key={symbol}
-                      className={draft.symbol === symbol ? 'selected' : ''}
-                      aria-label={symbolLabels[i]}
-                      aria-pressed={draft.symbol === symbol}
+                      key={character.id}
+                      aria-label={`${character.name} 표식`}
+                      aria-pressed={draft.symbol === character.id}
                       onClick={() => {
-                        setDraft((d) => ({ ...d, symbol }));
+                        setDraft((d) => ({ ...d, symbol: character.id }));
                         setSaved(false);
                       }}
                     >
-                      {symbol}
+                      <CharacterMark symbol={character.id} />
+                      <strong>{character.name}</strong>
+                      <small>{character.type}</small>
+                      {draft.symbol === character.id && <Check size={16} />}
                     </button>
                   ))}
                 </div>
+                <details>
+                  <summary>기존 표식도 선택하기</summary>
+                  <div className="forest-option-row">
+                    {legacySymbols.map((symbol, n) => (
+                      <button
+                        key={symbol}
+                        aria-label={legacyLabels[n]}
+                        aria-pressed={draft.symbol === symbol}
+                        onClick={() => {
+                          setDraft((d) => ({ ...d, symbol }));
+                          setSaved(false);
+                        }}
+                      >
+                        {symbol}
+                      </button>
+                    ))}
+                  </div>
+                </details>
                 <button
                   className="forest-button"
                   onClick={() => {
@@ -1381,16 +1474,18 @@ export function ForestApp() {
           <button
             key={id}
             aria-current={
-              view === id || (id === 'word' && ['practice', 'quiz', 'result'].includes(view))
+              view === id ||
+              (id === 'word' && ['photos', 'practice', 'quiz', 'result'].includes(view))
                 ? 'page'
                 : undefined
             }
             className={
-              view === id || (id === 'word' && ['practice', 'quiz', 'result'].includes(view))
+              view === id ||
+              (id === 'word' && ['photos', 'practice', 'quiz', 'result'].includes(view))
                 ? 'active'
                 : ''
             }
-            onClick={() => go(id)}
+            onClick={() => go(id === 'word' ? 'photos' : id)}
           >
             <Icon size={22} />
             <span>{name}</span>

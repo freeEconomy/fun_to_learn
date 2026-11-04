@@ -2,11 +2,13 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   discoveryPlan,
+  discoveryReviewIds,
   emptyDiscovery,
   finishDiscovery,
   learningDay,
   readDiscovery,
 } from '../lib/forest/discovery';
+import { dailyAdventureIds } from '../lib/forest/daily-learning';
 import { words } from '../lib/forest/content';
 const now = '2026-10-27T12:00:00.000Z';
 const results = [
@@ -33,12 +35,13 @@ test('old and corrupted discovery profiles preserve only safe entries and resuma
   ])
     assert.equal(readDiscovery({ session }).session, null);
 });
-test('plans start with a football interest, prefer overdue or mistaken words, and retire repaired quiz mistakes', () => {
-  assert.deepEqual(discoveryPlan(emptyDiscovery, [], now), ['soccer', 'dog', 'apple']);
+test('daily plans stay fresh and stable while review suggestions retain overdue and repaired quiz handling', () => {
+  assert.deepEqual(discoveryPlan(emptyDiscovery, [], now), dailyAdventureIds(now));
   const p = finishDiscovery(emptyDiscovery, results, now);
-  assert.equal(discoveryPlan(p, [], now)[0], 'soccer');
+  assert.equal(discoveryReviewIds(p, [], now)[0], 'soccer');
+  assert.deepEqual(discoveryPlan(p, [], now), dailyAdventureIds(now));
   const record = { word: 'cat', date: '2026-10-26T12:00:00Z', review: true };
-  assert.equal(discoveryPlan(p, [record], now)[0], 'cat');
+  assert.equal(discoveryReviewIds(p, [record], now)[0], 'cat');
   const repaired = finishDiscovery(
     p,
     [
@@ -48,8 +51,8 @@ test('plans start with a football interest, prefer overdue or mistaken words, an
     ],
     now,
   );
-  assert.ok(!discoveryPlan(repaired, [record], now).includes('cat'));
-  const due = discoveryPlan(p, [], '2026-10-30T12:00:00Z');
+  assert.ok(!discoveryReviewIds(repaired, [record], now).includes('cat'));
+  const due = discoveryReviewIds(p, [], '2026-10-30T12:00:00Z');
   assert.ok(due.includes('dog'));
 });
 test('completion schedules recall and grants just one non-consecutive stamp per Korean calendar day', () => {

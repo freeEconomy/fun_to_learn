@@ -6,6 +6,7 @@ test.beforeEach(async ({ page }) => {
     HTMLMediaElement.prototype.canPlayType = () => '';
   });
 });
+import { dailyAdventureIds } from '../lib/forest/daily-learning';
 import { words } from '../lib/forest/content';
 async function start(page: Page) {
   await page.goto('/');
@@ -180,7 +181,7 @@ test('legacy profiles retain points and preferences when discovery data is malfo
   await expect(page.locator('.run-companion-face')).toHaveText('🐱');
   await expect(page.getByRole('heading', { name: /민우, 오늘은/ })).toBeVisible();
   await page.getByRole('button', { name: '오늘의 모험 시작', exact: true }).click();
-  expect((await target(page)).id).toBe('soccer');
+  expect((await target(page)).id).toBe(dailyAdventureIds()[0]);
 });
 
 test('English word and sentence narration require a tap and stop when the next word starts', async ({

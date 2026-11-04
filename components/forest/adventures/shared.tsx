@@ -1,5 +1,6 @@
 'use client';
 import { ArrowLeft, ArrowRight, Star, Trophy, Volume2 } from 'lucide-react';
+import { CharacterMark } from '../character-mark';
 import type { TalePage } from '@/lib/forest/adventures';
 
 export function StoryScene({
@@ -66,6 +67,7 @@ export function AdventureComplete({
   onAgain,
   onBack,
   story = false,
+  symbol,
 }: {
   title: string;
   score: number;
@@ -73,9 +75,22 @@ export function AdventureComplete({
   onAgain: () => void;
   onBack: () => void;
   story?: boolean;
+  symbol?: string;
 }) {
   return (
     <section className="adventure-complete" aria-label="모험 완료">
+      {!story && (
+        <div className="reward-sparkles" aria-hidden="true">
+          {Array.from({ length: 10 }, (_, n) => (
+            <i key={n} />
+          ))}
+        </div>
+      )}
+      {!story && symbol && (
+        <div className="reward-partner">
+          <CharacterMark symbol={symbol} />
+        </div>
+      )}
       <div className="adventure-trophy" aria-hidden="true">
         <Trophy size={52} />
       </div>

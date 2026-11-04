@@ -145,7 +145,11 @@ function SpellingRound({
           보세요.
         </p>
       )}
-      <p className="game-feedback" role="status">
+      <p
+        className="game-feedback"
+        role="status"
+        data-state={solved ? 'success' : mistake ? 'retry' : 'ready'}
+      >
         {feedback}
       </p>
       {solved && <SpeakButton text={target.name} speak={speak} label="완성 단어 듣기" />}
@@ -222,7 +226,11 @@ function DeliveryRound({
           사진 힌트 보기
         </button>
       )}
-      <p className="game-feedback" role="status">
+      <p
+        className="game-feedback"
+        role="status"
+        data-state={solved ? 'success' : mistake ? 'retry' : 'ready'}
+      >
         {feedback}
       </p>
       {solved && (
@@ -367,7 +375,11 @@ function SequenceRound({
           />
         </>
       )}
-      <p className="game-feedback" role="status">
+      <p
+        className="game-feedback"
+        role="status"
+        data-state={solved ? 'success' : mistake ? 'retry' : 'ready'}
+      >
         {feedback}
       </p>
     </>

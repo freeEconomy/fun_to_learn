@@ -1,5 +1,8 @@
 'use client';
 import { SoccerGame } from './soccer';
+import { GameArt } from './game-art';
+import { learningDay } from '@/lib/forest/daily-learning';
+import './arcade-premium.css';
 import { QuestGame } from './word-quests';
 import { GameProgress, type PlayProps } from './game-shared';
 import {
@@ -111,7 +114,11 @@ function MemoryGame({ speak, onFinish, level }: PlayProps) {
           );
         })}
       </div>
-      <p className="game-feedback" role="status">
+      <p
+        className="game-feedback"
+        role="status"
+        data-state={mismatch ? 'retry' : matched.length && !flipped.length ? 'success' : 'ready'}
+      >
         {feedback}
       </p>
       {mismatch && (
@@ -209,7 +216,11 @@ function ListeningGame({ speak, stop, onFinish, level }: PlayProps) {
           );
         })}
       </div>
-      <p className="game-feedback" role="status">
+      <p
+        className="game-feedback"
+        role="status"
+        data-state={solved ? 'success' : mistake ? 'retry' : 'ready'}
+      >
         {feedback}
       </p>
       <button className="forest-button" disabled={!solved} onClick={next}>
@@ -305,7 +316,11 @@ function SentenceRound({
           </button>
         ))}
       </div>
-      <p className="game-feedback" role="status">
+      <p
+        className="game-feedback"
+        role="status"
+        data-state={solved ? 'success' : mistake ? 'retry' : 'ready'}
+      >
         {feedback}
       </p>
       <div className="forest-actions">
@@ -374,11 +389,13 @@ function TrainGame({ speak, stop, onFinish, level }: PlayProps) {
 }
 export function GameArcade({
   progress,
+  symbol = 'pikachu',
   speak,
   stop,
   onComplete,
 }: {
   progress: AdventureProgress;
+  symbol?: string;
   speak: (text: string) => void;
   stop: () => void;
   onComplete: (id: ActivityId, score: number) => number;
@@ -389,6 +406,14 @@ export function GameArcade({
     [result, setResult] = useState<{ score: number; earned: number } | null>(null);
   const finished = useRef(false);
   const mode = gameModes.find((g) => g.id === selected);
+  const today = learningDay(new Date().toISOString());
+  const done = new Set(
+    progress.activityRecords
+      .filter(
+        (record) => record.activityId.startsWith('game:') && learningDay(record.date) === today,
+      )
+      .map((record) => record.activityId),
+  );
   const back = () => {
     stop();
     window.scrollTo({ top: 0 });
@@ -405,19 +430,42 @@ export function GameArcade({
   }
   if (!mode)
     return (
-      <>
+      <div className="arcade-worlds arcade-lobby">
         <AdventureHeading
           eyebrow="PLAY · LISTEN · DISCOVER"
           title="와글와글 게임 놀이터"
           description="서두르지 않아도 괜찮아요. 한 번 더 해 보면, 영어가 내 친구!"
         />
-        <div className="arcade-banner">
-          <span aria-hidden="true">🏕️</span>
-          <div>
-            <h2>오늘은 어떤 모험을 할까?</h2>
-            <p>더 커진 도전! 알파벳 조립부터 단어 배달, 기억 탐험까지.</p>
-            <small>제한시간 없이 · 포인트 차감 없이 · 키보드로도 플레이</small>
+        <div className="arcade-hero">
+          <div className="arcade-hero-copy">
+            <span className="arcade-kicker">YOUR NEXT GREAT ADVENTURE</span>
+            <h2>
+              작은 도전,
+              <br />
+              커다란 발견!
+            </h2>
+            <p>
+              듣고, 연결하고, 기억해 봐.
+              <br />
+              오늘은 어떤 세계로 떠날까?
+            </p>
+            <div className="arcade-hero-stats">
+              <span>
+                <b>{gameModes.length}</b>개의 게임 세계
+              </span>
+              <span>
+                <b>{done.size}</b>개 오늘 완료
+              </span>
+              <span>시간제한 없이 즐겨요</span>
+            </div>
           </div>
+          <GameArt game="sequence" className="arcade-hero-art" />
+          <span className="arcade-orbit orbit-one" aria-hidden="true">
+            ✦
+          </span>
+          <span className="arcade-orbit orbit-two" aria-hidden="true">
+            ✧
+          </span>
         </div>
         <fieldset className="game-levels">
           <legend>오늘의 난이도</legend>
@@ -443,7 +491,7 @@ export function GameArcade({
           ))}
         </fieldset>
         <div className="game-menu">
-          {gameModes.map((game) => {
+          {gameModes.map((game, number) => {
             const records = progress.activityRecords.filter(
               (r) => r.activityId === `game:${game.id}`,
             );
@@ -452,7 +500,6 @@ export function GameArcade({
               <button
                 key={game.id}
                 className={`game-tile game-${game.id}`}
-                style={{ background: game.color }}
                 onClick={() => {
                   stop();
                   finished.current = false;
@@ -463,18 +510,26 @@ export function GameArcade({
                 }}
                 aria-label={`${game.title} 시작`}
               >
-                <span className="game-tile-emoji" aria-hidden="true">
-                  {game.emoji}
-                </span>
-                <span className="tale-badge">{game.tag}</span>
-                <h2>{game.title}</h2>
-                <p>{game.subtitle}</p>
-                <span className="game-level-detail">{gameDescriptions[game.id][level]}</span>
-                <small>{best === null ? '처음 떠나는 모험' : `최고 기록 ${best}점`}</small>
-                <strong>
-                  놀러 가기
-                  <ArrowRight size={18} />
-                </strong>
+                <div className="game-poster">
+                  <GameArt game={game.id} />
+                  <span className="game-world-number">WORLD 0{number + 1}</span>
+                  {done.has(`game:${game.id}`) && (
+                    <span className="game-today-win">
+                      <Check size={12} />
+                      오늘 완료
+                    </span>
+                  )}
+                </div>
+                <div className="game-copy">
+                  <span className="tale-badge">{game.tag}</span>
+                  <h2>{game.title}</h2>
+                  <p>{game.subtitle}</p>
+                  <span className="game-level-detail">{gameDescriptions[game.id][level]}</span>
+                  <small>{best === null ? '첫 모험을 시작해 봐요' : `최고 기록 ${best}점`}</small>
+                  <strong>
+                    플레이 <ArrowRight size={18} />
+                  </strong>
+                </div>
               </button>
             );
           })}
@@ -487,23 +542,27 @@ export function GameArcade({
             번이에요.
           </span>
         </div>
-      </>
+      </div>
     );
   return (
-    <>
-      <AdventureHeading
-        eyebrow="FUN TO RUN · PLAY TIME"
-        title={mode.title}
-        description={mode.subtitle}
-        onBack={back}
-        backLabel="게임 놀이터"
-      />
+    <div className={`arcade-worlds arcade-active world-${mode.id}`}>
+      <div className="arena-topline">
+        <AdventureHeading
+          eyebrow="FUN TO RUN · PLAY TIME"
+          title={mode.title}
+          description={mode.subtitle}
+          onBack={back}
+          backLabel="게임 놀이터"
+        />
+        <GameArt game={mode.id} className="arena-miniature" />
+      </div>
       <p className="game-level-banner">
         {level === 'challenge' ? '도전 모드' : '연습 모드'} · {gameDescriptions[mode.id][level]}
       </p>
       {result ? (
         <AdventureComplete
           title="오늘의 모험 성공!"
+          symbol={symbol}
           score={result.score}
           earned={result.earned}
           onAgain={() => {
@@ -532,6 +591,6 @@ export function GameArcade({
           onFinish={finish}
         />
       )}
-    </>
+    </div>
   );
 }

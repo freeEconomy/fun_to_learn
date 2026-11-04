@@ -1,16 +1,16 @@
 import { words } from './content';
+import { dailyAdventureIds, learningDay } from './daily-learning';
+export { learningDay } from './daily-learning';
 
 export type DiscoveryResult = { id: string; first: boolean };
 export type DiscoveryEntry = { last: string; due: string; streak: number; needsReview: boolean };
-export type DiscoverySession = { ids: string[]; results: DiscoveryResult[] };
+export type DiscoverySession = { ids: string[]; results: DiscoveryResult[]; day: string };
 export type DiscoveryProgress = {
   entries: Record<string, DiscoveryEntry>;
   days: string[];
   session: DiscoverySession | null;
 };
 export const emptyDiscovery: DiscoveryProgress = { entries: {}, days: [], session: null };
-export const learningDay = (date: string) =>
-  new Date(date).toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
 const known = (id: unknown): id is string =>
   typeof id === 'string' && words.some((w) => w.id === id);
 const validDate = (date: unknown): date is string =>
@@ -21,7 +21,7 @@ const validDay = (date: unknown): date is string =>
   validDate(date) &&
   new Date(date).toISOString().slice(0, 10) === date;
 
-export function readDiscovery(raw: unknown): DiscoveryProgress {
+export function readDiscovery(raw: unknown, now = new Date().toISOString()): DiscoveryProgress {
   if (!raw || typeof raw !== 'object') return { ...emptyDiscovery };
   const p = raw as DiscoveryProgress;
   const entries: DiscoveryProgress['entries'] = {};
@@ -51,9 +51,10 @@ export function readDiscovery(raw: unknown): DiscoveryProgress {
     new Set(s.ids).size === 3 &&
     Array.isArray(s.results) &&
     s.results.length < 3 &&
-    s.results.every((r, i) => r && r.id === s.ids[i] && typeof r.first === 'boolean')
+    s.results.every((r, i) => r && r.id === s.ids[i] && typeof r.first === 'boolean') &&
+    (s.day === undefined || validDay(s.day))
   )
-    session = { ids: s.ids, results: s.results };
+    session = { ids: s.ids, results: s.results, day: s.day || learningDay(now) };
   return { entries, days, session };
 }
 
@@ -83,22 +84,19 @@ export function discoveryReviewIds(
 }
 
 export function discoveryPlan(
-  progress: DiscoveryProgress,
-  records: { word: string; date: string; review: boolean }[],
+  _progress: DiscoveryProgress,
+  _records: { word: string; date: string; review: boolean }[],
   now = new Date().toISOString(),
 ): string[] {
-  const latest = [...new Map(records.map((r) => [r.word, r])).values()];
-  const reviewIds = discoveryReviewIds(progress, records, now);
-  const preferred = ['soccer', 'dog', 'apple', ...words.map((w) => w.id)];
-  const unseen = preferred.filter(
-    (id) => !progress.entries[id] && !latest.some((r) => r.word === id),
-  );
-  const remaining = Object.entries(progress.entries)
-    .sort((a, b) => a[1].last.localeCompare(b[1].last))
-    .map(([id]) => id);
-  return [...new Set([...reviewIds, ...unseen, ...remaining, ...preferred])]
-    .filter(known)
-    .slice(0, 3);
+  // The daily pack stays stable after completion. Review suggestions remain available separately.
+  return dailyAdventureIds(now);
+}
+
+export function currentDiscoverySession(
+  progress: DiscoveryProgress,
+  now = new Date().toISOString(),
+) {
+  return progress.session?.day === learningDay(now) ? progress.session : null;
 }
 
 export function finishDiscovery(

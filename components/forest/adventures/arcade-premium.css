@@ -1,0 +1,889 @@
+.arcade-worlds {
+  --arena-accent: #3d8067;
+  --arena-soft: #edf5e9;
+}
+.arcade-worlds .adventure-heading > .forest-eyebrow {
+  color: #628178;
+  letter-spacing: 2px;
+}
+.arcade-hero {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 270px;
+  padding: 36px 42px;
+  margin: 28px 0;
+  border-radius: 28px;
+  color: #fffaf0;
+  background:
+    radial-gradient(ellipse at 85% 0%, #407b85, transparent 60%),
+    linear-gradient(120deg, #213e50, #244c56);
+  box-shadow: 0 12px 26px #213e501a;
+}
+.arcade-hero::before {
+  content: '';
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  border: 1px solid #a1d9ca30;
+  border-radius: 50%;
+  right: -60px;
+  top: -110px;
+  z-index: -1;
+  box-shadow:
+    0 0 0 50px #a1d9ca09,
+    0 0 0 100px #a1d9ca05;
+}
+.arcade-kicker {
+  font-size: 9px;
+  color: #b6dace;
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+.arcade-hero h2 {
+  margin: 12px 0;
+  font-size: clamp(29px, 3.5vw, 42px);
+  line-height: 1.25;
+  letter-spacing: -1.5px;
+  color: #fff9e6;
+}
+.arcade-hero-copy {
+  position: relative;
+  z-index: 1;
+}
+.arcade-hero-copy > p {
+  font-size: 13px;
+  color: #b9d0c8;
+  line-height: 1.85;
+}
+.arcade-hero-art {
+  width: 42%;
+  max-width: 370px;
+  transform: rotate(5deg);
+  filter: drop-shadow(0 20px 16px #09202b55);
+}
+.arcade-hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 22px;
+  font-size: 10px;
+  color: #c9ded4;
+}
+.arcade-hero-stats b {
+  font-size: 17px;
+  color: #ffdb94;
+  margin-right: 3px;
+}
+.arcade-orbit {
+  position: absolute;
+  color: #ffe2a2;
+  font-size: 30px;
+  opacity: 0.85;
+}
+.orbit-one {
+  top: 22px;
+  right: 25px;
+}
+.orbit-two {
+  right: 41%;
+  bottom: 20px;
+  font-size: 22px;
+}
+.arcade-worlds .game-levels {
+  padding: 5px 0 8px;
+  margin: 22px 0 24px;
+}
+.arcade-worlds .game-levels legend {
+  font-size: 15px;
+}
+.arcade-worlds .game-levels label {
+  background: #fffef9;
+  border-radius: 15px;
+  padding: 14px 18px;
+}
+.arcade-worlds .game-levels label.chosen {
+  background: #e9f1df;
+}
+.arcade-worlds .game-menu {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+.arcade-worlds .game-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow: hidden;
+  padding: 0;
+  background: #fffdf7;
+  border: 1px solid #dce4d6;
+  border-radius: 23px;
+  box-shadow:
+    0 6px 0 #e0e7d8,
+    0 12px 26px #36513a08;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.arcade-worlds .game-tile:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 9px 0 #dbe3d2,
+    0 18px 30px #36513a13;
+}
+.game-poster {
+  position: relative;
+  padding: 9px 9px 0;
+}
+.game-art {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.game-poster .game-art {
+  aspect-ratio: 5 / 3;
+}
+.game-world-number {
+  position: absolute;
+  top: 17px;
+  left: 18px;
+  padding: 6px 8px;
+  color: #fffaf0;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: #274858b8;
+  border-radius: 6px;
+}
+.game-today-win {
+  position: absolute;
+  right: 17px;
+  bottom: 9px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 7px;
+  padding: 5px 7px;
+  color: #355e47;
+  background: #fffdf2ed;
+  font-size: 9px;
+  font-weight: 800;
+}
+.game-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  padding: 18px 20px 21px;
+}
+.arcade-worlds .game-copy .tale-badge {
+  font-size: 9px;
+  letter-spacing: 0.3px;
+  color: #688070;
+  background: #f0f4e9;
+}
+.arcade-worlds .game-copy h2 {
+  color: #284c3f;
+  font-size: 21px;
+  line-height: 1.4;
+  margin: 11px 0 8px;
+  letter-spacing: -0.8px;
+}
+.arcade-worlds .game-copy p {
+  color: #7d8874;
+  font-size: 12px;
+  line-height: 1.7;
+  min-height: 42px;
+  margin: 0;
+}
+.arcade-worlds .game-copy .game-level-detail {
+  margin-top: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.65;
+  min-height: 33px;
+}
+.arcade-worlds .game-copy small {
+  font-size: 10px;
+  margin: 12px 0 0;
+  color: #95a088;
+}
+.arcade-worlds .game-copy > strong {
+  align-self: stretch;
+  justify-content: space-between;
+  min-height: 44px;
+  margin-top: 14px;
+  padding: 10px 13px;
+  font-size: 12px;
+  color: #385d49;
+  border-radius: 11px;
+  background: #edf3e7;
+}
+.arcade-worlds .adventure-note {
+  margin-top: 28px;
+  background: #f0f4e9;
+  border: 1px solid #dce5d4;
+}
+.arena-topline {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.arena-topline .adventure-heading {
+  flex: 1;
+  min-width: 0;
+}
+.arena-miniature {
+  width: 154px;
+  flex-shrink: 0;
+  border-radius: 18px;
+  transform: rotate(3deg);
+  box-shadow: 0 7px 0 #e0e5d7;
+}
+.arcade-active .adventure-heading h1 {
+  margin-top: 9px;
+  font-size: 31px;
+}
+.arcade-active .adventure-heading p {
+  font-size: 13px;
+}
+.arcade-active .game-level-banner {
+  margin: 16px auto 22px;
+  background: #ecf2e6;
+  border: 1px solid #dce6d2;
+  font-size: 11px;
+  padding: 11px 15px;
+}
+.arcade-worlds .game-board {
+  position: relative;
+  padding: 28px;
+  border: 1px solid #dbe4d4;
+  border-radius: 24px;
+  background: radial-gradient(ellipse at 100% 0%, #f2f6ea, transparent 48%), #fffef9;
+  box-shadow:
+    0 7px 0 #dfe7d5,
+    0 15px 35px #36513a09;
+}
+.arcade-worlds .game-progress {
+  gap: 10px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #e8edde;
+  margin-bottom: 22px;
+  align-items: center;
+}
+.arcade-worlds .game-progress > span {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+}
+.arcade-worlds .game-progress > strong {
+  font-size: 13px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: #edf4e4;
+  font-variant-numeric: tabular-nums;
+}
+.arcade-worlds .game-progress > div {
+  height: 7px;
+  background: #e7edde;
+}
+.arcade-worlds .game-progress > div > i {
+  background: linear-gradient(90deg, #76b29c, #3f8169);
+  transition: width 0.3s ease;
+}
+.arena-steps {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  list-style: none;
+  padding: 3px 0 0;
+  margin: 0;
+}
+.arena-steps li {
+  flex: 1;
+  max-width: 34px;
+  min-width: 0;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  color: #9aa58c;
+  border: 1px solid #e0e7d6;
+  border-radius: 8px;
+  background: #f8faf3;
+}
+.arena-steps li.lit {
+  color: #f7fff2;
+  background: #55866e;
+  border-color: #55866e;
+  box-shadow: 0 2px 0 #3e6853;
+}
+.arcade-worlds .game-feedback {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 66px;
+  margin: 24px 0 18px;
+  padding: 14px 16px;
+  border: 1px solid #e3eadc;
+  border-radius: 15px;
+  background: #f2f6eb;
+  color: #6a7f61;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.8;
+}
+.arcade-worlds .game-feedback::before {
+  content: '✦';
+  color: #8cab79;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.arcade-worlds .game-feedback[data-state='success'] {
+  color: #2b6a4a;
+  background: #e8f4e1;
+  border-color: #a6ca96;
+  animation: answer-arrive 0.28s ease-out;
+}
+.arcade-worlds .game-feedback[data-state='success']::before {
+  content: '✓';
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #4b8a63;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+}
+.arcade-worlds .game-feedback[data-state='retry'] {
+  background: #fff6e3;
+  color: #8e7444;
+  border-color: #ead6aa;
+}
+.arcade-worlds .game-feedback[data-state='retry']::before {
+  color: #d3a851;
+}
+.arcade-worlds .memory-card {
+  border-color: #a8b9ce;
+  box-shadow: 0 4px 0 #91a3bc;
+  background: #f6f8ff;
+  border-radius: 16px;
+}
+.arcade-worlds .memory-card:not(.open) {
+  background:
+    radial-gradient(circle at 50% 30%, #a7c2e7, transparent 50%),
+    repeating-linear-gradient(135deg, #819bc4 0 20px, #7892bd 20px 21px);
+  border-color: #b5c9e5;
+}
+.arcade-worlds .memory-back {
+  color: #fff6cb;
+  text-shadow: 0 3px 0 #54709d;
+}
+.arcade-worlds .memory-back small {
+  color: #ecf4ff;
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+.arcade-worlds .memory-card.open {
+  animation: card-arrive 0.22s ease-out;
+}
+.arcade-worlds .memory-card.matched {
+  background: #edf6e4;
+  border-color: #9abf86;
+  box-shadow: 0 4px 0 #83a76e;
+}
+.arcade-worlds .sound-treasure {
+  position: relative;
+  border: 1px solid #dce8e9;
+  border-radius: 24px;
+  padding: 27px 20px;
+  background: radial-gradient(circle at 50% 30%, #d7edf0, transparent 60%), #eff7f3;
+  overflow: hidden;
+}
+.arcade-worlds .sound-treasure > span {
+  display: grid;
+  place-items: center;
+  width: 74px;
+  height: 74px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  border: 1px solid #aac9cf;
+  background: #ffffff7a;
+  box-shadow:
+    0 0 0 9px #c9e5e755,
+    0 0 0 19px #c9e5e730;
+  font-size: 30px;
+}
+.arcade-worlds .sound-play {
+  background: #2f6e75;
+  color: white;
+  border-radius: 16px;
+  box-shadow: 0 5px 0 #24565c;
+}
+.arcade-worlds .listening-options {
+  margin-top: 24px;
+}
+.arcade-worlds .listening-options button {
+  border-width: 2px;
+  border-radius: 17px;
+  box-shadow: 0 4px 0 #e1e7d7;
+  transition: transform 0.15s ease;
+}
+.arcade-worlds .listening-options button:not(:disabled):hover {
+  transform: translateY(-3px);
+}
+.arcade-worlds .listening-options .correct {
+  box-shadow: 0 4px 0 #9abc89;
+  border-color: #77a569;
+}
+.arcade-worlds .sentence-track {
+  position: relative;
+  min-height: 110px;
+  border: 1px solid #efdec4;
+  background: linear-gradient(
+    #fff7e8 76%,
+    #d5b38a 77% 79%,
+    #fff7e8 80% 88%,
+    #d5b38a 89% 91%,
+    #fff7e8 92%
+  );
+}
+.arcade-worlds .train-car {
+  background: #f4d193;
+  border-color: #d4af73;
+  color: #74572d;
+  box-shadow: 0 4px 0 #bd995f;
+  animation: answer-arrive 0.2s ease-out;
+}
+.arcade-worlds .sentence-tokens button {
+  background: #fffef8;
+  border-color: #c9d7be;
+  box-shadow: 0 4px 0 #b3c3a8;
+}
+.arcade-worlds .letter-slots {
+  background: radial-gradient(circle at 50% 0%, #f0e5fa, transparent 70%), #f9f4fd;
+  border: 1px solid #e4d8ee;
+}
+.arcade-worlds .letter-slots > span {
+  border-color: #d9c4e7;
+}
+.arcade-worlds .letter-bank button {
+  background: #fffdf6;
+  color: #6c5187;
+  border-color: #cbb6dd;
+  box-shadow: 0 4px 0 #b79dcd;
+}
+.arcade-worlds .letter-slots button {
+  background: #e3d2f1;
+  animation: answer-arrive 0.2s ease-out;
+}
+.arcade-worlds .delivery-parcel {
+  box-shadow:
+    0 6px 0 #d4ad6f,
+    0 15px 25px #9e7a3d17;
+  border-radius: 16px;
+  border-color: #e1c38b;
+}
+.arcade-worlds .delivery-shops button {
+  position: relative;
+  overflow: hidden;
+  padding-top: 28px;
+  background: #fffcf2;
+  border-color: #e1d8c1;
+  box-shadow: 0 4px 0 #d7ccb2;
+}
+.arcade-worlds .delivery-shops button::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 13px;
+  background: repeating-linear-gradient(90deg, #86aa91 0 14px, #e1edda 14px 28px);
+  border-radius: 0 0 6px 6px;
+}
+.arcade-worlds .delivery-shops button:nth-child(2)::before {
+  background: repeating-linear-gradient(90deg, #d6a86b 0 14px, #f7e4b6 14px 28px);
+}
+.arcade-worlds .delivery-shops button:nth-child(3)::before {
+  background: repeating-linear-gradient(90deg, #7a9fb7 0 14px, #dbe8ed 14px 28px);
+}
+.arcade-worlds .delivery-shops button:nth-child(4)::before {
+  background: repeating-linear-gradient(90deg, #b397c1 0 14px, #ebdef3 14px 28px);
+}
+.arcade-worlds .delivery-shops button.correct {
+  background: #eaf4df;
+  border-color: #85af75;
+}
+.arcade-worlds .sequence-study {
+  padding: 12px;
+  border: 1px dashed #bdcfb2;
+  border-radius: 22px;
+  background:
+    radial-gradient(#b7cda3 1px, transparent 1px) 0 0 / 16px 16px,
+    #f3f7eb;
+}
+.arcade-worlds .sequence-study li {
+  border: 1px solid #d4dfc8;
+  background: #fffdf3;
+  box-shadow: 0 4px 0 #d5dfc9;
+}
+.arcade-worlds .sequence-number {
+  background: #4a7d6b;
+  box-shadow: 0 2px 0 #335c4b;
+}
+.arcade-worlds .sequence-slots {
+  background: #e7efe0;
+  border: 1px dashed #b6cba8;
+}
+.arcade-worlds .sequence-options button {
+  box-shadow: 0 4px 0 #dce5d3;
+}
+.arcade-worlds .soccer-game {
+  border: 1px solid #cadccf;
+  border-radius: 23px;
+  box-shadow:
+    0 8px 0 #d8e3d2,
+    0 20px 40px #21483412;
+}
+.arcade-worlds .soccer-scoreboard {
+  background: linear-gradient(125deg, #193e42, #2d635a);
+  border-bottom: 3px solid #d4bf7c;
+}
+.arcade-worlds .soccer-pitch::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(125deg, #fff3, transparent 28% 72%, #fff2);
+  pointer-events: none;
+}
+.arcade-worlds .soccer-options button {
+  border-radius: 14px;
+  box-shadow: 0 4px 0 #e1e7d8;
+}
+.arcade-worlds .soccer-options button[aria-pressed='true'] {
+  border-color: #c4a34e;
+  box-shadow: 0 4px 0 #d7bc74;
+}
+.arcade-worlds .soccer-feedback {
+  border: 1px solid #dce7d6;
+  border-radius: 14px;
+}
+.arcade-worlds .adventure-complete {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  max-width: 850px;
+  margin: auto;
+  border: 1px solid #e4d5ac;
+  border-radius: 27px;
+  background:
+    radial-gradient(ellipse at 50% 0%, #fff0b7, transparent 65%), linear-gradient(#fffdf3, #f7f7ea);
+  box-shadow:
+    0 8px 0 #e1dfc5,
+    0 20px 40px #7b6b2c0d;
+}
+.reward-partner {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 16px;
+}
+.reward-sparkles {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 170px;
+  pointer-events: none;
+  z-index: -1;
+}
+.reward-sparkles i {
+  position: absolute;
+  width: 7px;
+  height: 13px;
+  background: #dbbd6a;
+  top: 18px;
+  border-radius: 2px;
+  animation: reward-arrive 0.8s ease-out both;
+}
+.reward-sparkles i:nth-child(1) {
+  left: 8%;
+  transform: rotate(18deg);
+}
+.reward-sparkles i:nth-child(2) {
+  left: 18%;
+  top: 80px;
+  background: #8db99e;
+  transform: rotate(-25deg);
+}
+.reward-sparkles i:nth-child(3) {
+  left: 27%;
+  top: 35px;
+  background: #aca0ce;
+}
+.reward-sparkles i:nth-child(4) {
+  left: 36%;
+  top: 112px;
+  transform: rotate(32deg);
+}
+.reward-sparkles i:nth-child(5) {
+  left: 45%;
+  top: 13px;
+  background: #8db99e;
+}
+.reward-sparkles i:nth-child(6) {
+  left: 55%;
+  top: 46px;
+  background: #d0b17d;
+  transform: rotate(-20deg);
+}
+.reward-sparkles i:nth-child(7) {
+  left: 64%;
+  top: 108px;
+  background: #a29bc5;
+}
+.reward-sparkles i:nth-child(8) {
+  left: 73%;
+  top: 24px;
+  background: #8db99e;
+  transform: rotate(28deg);
+}
+.reward-sparkles i:nth-child(9) {
+  left: 82%;
+  top: 82px;
+  transform: rotate(-28deg);
+}
+.reward-sparkles i:nth-child(10) {
+  left: 92%;
+  top: 15px;
+  background: #9fbd91;
+}
+.arcade-worlds .adventure-trophy {
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
+  background: #f6e5b4;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+  color: #b38b35;
+  transform: rotate(-5deg);
+  box-shadow: 0 5px 0 #e0c686;
+}
+.arcade-worlds .adventure-score {
+  font-variant-numeric: tabular-nums;
+  color: #385e48;
+}
+.arcade-worlds .adventure-prize {
+  background: #edf2e1;
+  border: 1px solid #dce3ca;
+  border-radius: 15px;
+}
+@keyframes card-arrive {
+  from {
+    transform: perspective(500px) rotateY(-45deg);
+    opacity: 0.5;
+  }
+  to {
+    transform: perspective(500px) rotateY(0);
+    opacity: 1;
+  }
+}
+@keyframes answer-arrive {
+  from {
+    transform: translateY(4px);
+    opacity: 0.5;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes reward-arrive {
+  from {
+    opacity: 0;
+    translate: 0 -20px;
+  }
+  to {
+    opacity: 0.7;
+    translate: 0 0;
+  }
+}
+@media (max-width: 900px) {
+  .arcade-worlds .game-menu {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .arcade-hero {
+    padding: 30px;
+    gap: 22px;
+  }
+}
+@media (max-width: 540px) {
+  .arcade-hero {
+    min-height: 240px;
+    padding: 24px 22px;
+    margin: 20px 0;
+    align-items: flex-start;
+  }
+  .arcade-hero h2 {
+    font-size: 29px;
+  }
+  .arcade-hero-art {
+    position: absolute;
+    width: 145px;
+    right: -20px;
+    top: 42px;
+    opacity: 0.6;
+    transform: rotate(12deg);
+  }
+  .arcade-hero-copy > p {
+    font-size: 12px;
+  }
+  .arcade-hero-stats {
+    gap: 11px;
+    font-size: 9px;
+    max-width: 235px;
+  }
+  .arcade-kicker {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+  .arcade-worlds .game-menu {
+    gap: 14px;
+  }
+  .arcade-worlds .game-tile {
+    border-radius: 18px;
+  }
+  .game-poster {
+    padding: 6px 6px 0;
+  }
+  .game-poster .game-art {
+    border-radius: 12px;
+  }
+  .game-world-number {
+    top: 11px;
+    left: 11px;
+    font-size: 6px;
+    padding: 4px 5px;
+  }
+  .game-today-win {
+    bottom: 3px;
+    right: 9px;
+    font-size: 7px;
+    padding: 3px 5px;
+  }
+  .game-copy {
+    padding: 13px 12px 14px;
+  }
+  .arcade-worlds .game-copy h2 {
+    font-size: 17px;
+    line-height: 1.4;
+    min-height: 47px;
+    letter-spacing: -0.7px;
+    margin: 9px 0 7px;
+  }
+  .arcade-worlds .game-copy .tale-badge {
+    font-size: 7px;
+    padding: 5px 6px;
+  }
+  .arcade-worlds .game-copy p {
+    font-size: 10px;
+    min-height: 51px;
+    line-height: 1.7;
+  }
+  .arcade-worlds .game-copy .game-level-detail {
+    font-size: 9px;
+    min-height: 32px;
+    margin-top: 9px;
+  }
+  .arcade-worlds .game-copy small {
+    font-size: 8px;
+    margin-top: 9px;
+  }
+  .arcade-worlds .game-copy > strong {
+    font-size: 11px;
+    padding: 9px 10px;
+    margin-top: 11px;
+  }
+  .arena-topline {
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .arena-miniature {
+    width: 75px;
+    margin-top: 58px;
+    border-radius: 12px;
+  }
+  .arcade-active .adventure-heading h1 {
+    font-size: 25px;
+    letter-spacing: -1px;
+  }
+  .arcade-active .adventure-heading p {
+    font-size: 11px;
+  }
+  .arcade-active .adventure-heading > .forest-eyebrow {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+  .arcade-active .game-level-banner {
+    padding: 9px 12px;
+    font-size: 10px;
+  }
+  .arcade-worlds .game-board {
+    padding: 20px 14px;
+    border-radius: 20px;
+  }
+  .arcade-worlds .game-progress {
+    padding-bottom: 15px;
+    margin-bottom: 18px;
+  }
+  .arcade-worlds .game-feedback {
+    min-height: 65px;
+    font-size: 12px;
+    padding: 12px;
+    gap: 8px;
+  }
+  .arcade-worlds .memory-grid {
+    gap: 8px;
+  }
+  .arcade-worlds .memory-card {
+    border-radius: 12px;
+  }
+  .arcade-worlds .memory-back small {
+    font-size: 6px;
+    letter-spacing: 0.3px;
+  }
+  .arcade-worlds .sound-treasure {
+    padding: 22px 14px;
+  }
+  .arcade-worlds .sound-treasure > span {
+    width: 58px;
+    height: 58px;
+    font-size: 24px;
+  }
+  .arcade-worlds .game-levels label {
+    padding: 12px 10px;
+  }
+  .arcade-worlds .game-levels small {
+    font-size: 9px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .arcade-worlds *,
+  .arcade-worlds *::before,
+  .arcade-worlds *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

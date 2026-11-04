@@ -1,0 +1,120 @@
+.character-mark {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 8px 7px #18374c18);
+}
+.run-companion-face .character-mark {
+  width: 64px;
+  height: 64px;
+}
+.english-card-preview {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow:
+    0 14px 40px #28403812,
+    inset 0 0 0 6px #ffffff75;
+}
+.english-card-preview::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 10%, #fff9, transparent 40%),
+    repeating-linear-gradient(135deg, transparent 0 38px, #fff3 38px 39px);
+  z-index: -1;
+}
+.english-card-preview > .character-mark {
+  width: 210px;
+  height: 210px;
+}
+.card-partner-name {
+  font-size: 20px;
+  color: #365144;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+.card-partner-type {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #6f7d6b;
+}
+.english-card-preview > .card-partner-type {
+  font-size: 10px;
+  line-height: 1.5;
+  max-width: 100%;
+}
+.character-picker {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0 26px;
+}
+.character-picker button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  min-height: 158px;
+  padding: 12px 8px;
+  border: 2px solid #e1e7da;
+  border-radius: 18px;
+  background: #fffef8;
+  color: #385a48;
+  box-shadow: 0 4px 0 #e6e9db;
+  transition: transform 0.15s ease;
+}
+.character-picker button[aria-pressed='true'] {
+  border-color: #5c8a68;
+  background: #eaf3df;
+  box-shadow: 0 4px 0 #a5bf96;
+}
+.character-picker .character-mark {
+  width: 88px;
+  height: 88px;
+  margin-bottom: 10px;
+}
+.character-picker strong {
+  font-size: 14px;
+}
+.character-picker small {
+  color: #89917d;
+  font-size: 10px;
+  margin-top: 5px;
+}
+.character-picker button > svg {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  background: #3d7253;
+  color: white;
+  border-radius: 50%;
+  padding: 3px;
+  width: 21px;
+  height: 21px;
+}
+.character-picker button:hover {
+  transform: translateY(-3px);
+}
+.character-picker button:focus-visible {
+  outline: 3px solid #d8ac4c;
+  outline-offset: 3px;
+}
+@media (max-width: 680px) {
+  .character-picker {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .english-card-preview > .character-mark {
+    width: 185px;
+    height: 185px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .character-picker button {
+    transition: none;
+  }
+}

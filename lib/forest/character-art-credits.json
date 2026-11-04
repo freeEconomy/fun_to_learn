@@ -1,0 +1,66 @@
+[
+  {
+    "id": "pikachu",
+    "name": "피카츄",
+    "number": 25,
+    "source": "https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/25.png",
+    "sha256": "759ceafdb4b8d637dfcfe673cf672bc3c472354a3b2e7e0835d9cdcacd8d195d",
+    "gitBlobSha": "16c1182c3747785aab301d6e801fba111ff759e2"
+  },
+  {
+    "id": "charizard",
+    "name": "리자몽",
+    "number": 6,
+    "source": "https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/6.png",
+    "sha256": "b6d5b8ee9fb05dc6f53294b2cae660dec770b92762cdb19d16bcbd679e1ba43a",
+    "gitBlobSha": "4c4fb9175e8eacfa83d4f64b47fdbb92cf09f902"
+  },
+  {
+    "id": "mewtwo",
+    "name": "뮤츠",
+    "number": 150,
+    "source": "https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/150.png",
+    "sha256": "d99adeb9b4523073ca218a6f472ea5b602b047ccd8af8dea6fa7ae051f80366a",
+    "gitBlobSha": "6cc7469a9208ff12be7a62117f9530ba3d7bfaec"
+  },
+  {
+    "id": "lucario",
+    "name": "루카리오",
+    "number": 448,
+    "source": "https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/448.png",
+    "sha256": "8c5064f1d4a37c8b554d7ad83d77970b02d6875750f934c782493c83f8943127",
+    "gitBlobSha": "ccfcc5058272e53e787c8368ae3bf299d69936d2"
+  },
+  {
+    "id": "rayquaza",
+    "name": "레쿠쟈",
+    "number": 384,
+    "source": "https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/384.png",
+    "sha256": "52fdacd461e20343dc7fd127b062c23429dc63dfe558c94b9aea0dc7a27be939",
+    "gitBlobSha": "2306f2c4d614ef66ab9fa6a54a1e65b1ffc9f8d3"
+  },
+  {
+    "id": "greninja",
+    "name": "개굴닌자",
+    "number": 658,
+    "source": "https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/658.png",
+    "sha256": "e88f4590ff53a8f8965c9e1be19a0f069c51c4dc7ca64ecb25ac96c64c8504d3",
+    "gitBlobSha": "709af937c080030a697f5275bca9565575820f62"
+  },
+  {
+    "id": "garchomp",
+    "name": "한카리아스",
+    "number": 445,
+    "source": "https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/445.png",
+    "sha256": "c9122fe26666487f152bc299ce73257141d5e762d486ac49867c97b19342980f",
+    "gitBlobSha": "5ab8b889d22fa0f17055f37d5175d478386d0939"
+  },
+  {
+    "id": "dragonite",
+    "name": "망나뇽",
+    "number": 149,
+    "source": "https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/149.png",
+    "sha256": "4bd7549caa15eac43a8197ba53e843a95f2b56c71b1121829ea76764fbf26f9c",
+    "gitBlobSha": "ed9b580e6cc050fcc0b562dd705fbbaa2d39f5f0"
+  }
+]

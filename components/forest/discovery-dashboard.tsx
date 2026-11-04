@@ -24,7 +24,7 @@ export function DiscoveryDashboard({
         <div>
           <span className="forest-eyebrow">YOUR NEXT LITTLE ADVENTURE</span>
           <h2>{progress.session ? '멈췄던 모험, 이어서 해 볼까?' : '딱 세 단어, 작은 대모험!'}</h2>
-          <p>듣고 찾고, 내 목소리로 말해 봐. 헷갈렸던 단어는 먼저 만나.</p>
+          <p>듣고 찾고, 내 목소리로 말해 봐. 오늘의 세 단어는 매일 새롭게!</p>
           <div className="discovery-preview">
             {(progress.session?.ids || plan).map((id) => {
               const w = words.find((w) => w.id === id)!;

@@ -1,0 +1,5 @@
+Pokemon character artwork obtained from the public PokeAPI/sprites official-artwork collection, unchanged.
+Source: https://github.com/PokeAPI/sprites
+All image contents are Copyright The Pokemon Company, as stated by the upstream source. Pokemon names and characters are associated with The Pokemon Company, Nintendo, Creatures Inc. and GAME FREAK inc.
+This learning application is not an official Pokemon product. No ownership or open-source license is claimed for the character artwork.
+Individual source links and file checksums are recorded in lib/forest/character-art-credits.json.

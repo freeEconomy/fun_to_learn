@@ -2,6 +2,8 @@
 
 import { ArrowRight, BookOpen, Check, Compass, Flag, Gamepad2, Sparkles, Star } from 'lucide-react';
 import { DiscoveryDashboard } from './discovery-dashboard';
+import { CharacterMark } from './character-mark';
+import type { Word } from '@/lib/forest/content';
 import { type DiscoveryProgress } from '@/lib/forest/discovery';
 import type { ActivityRecord } from '@/lib/forest/adventures';
 
@@ -25,6 +27,7 @@ export function AdventureHome({
   discovery,
   plan,
   onStart,
+  photoWord,
 }: {
   name: string;
   symbol: string;
@@ -42,6 +45,7 @@ export function AdventureHome({
   discovery: DiscoveryProgress;
   plan: string[];
   onStart: () => void;
+  photoWord?: Word;
 }) {
   const today = day(new Date().toISOString());
   const done = [
@@ -58,8 +62,10 @@ export function AdventureHome({
       action: onWord,
       icon: Compass,
       className: 'words',
-      image: '/english-photos/dog.jpg',
-      alt: '사진 단어 숲에서 만날 강아지',
+      image: photoWord?.photo || '/english-photos/dog.jpg',
+      alt: photoWord
+        ? `오늘 사진 단어 숲에서 만날 ${photoWord.korean}`
+        : '사진 단어 숲에서 만날 강아지',
     },
     {
       title: '이야기 성',
@@ -122,8 +128,8 @@ export function AdventureHome({
       </section>
       <section className="run-progress explorer-passport" aria-label="나의 학습 현황">
         <button className="run-companion" onClick={onCard} aria-label="학습 친구 바꾸기">
-          <span className="run-companion-face" aria-hidden="true">
-            {symbol}
+          <span className="run-companion-face">
+            <CharacterMark symbol={symbol} />
           </span>
           <span>
             나의 탐험 친구

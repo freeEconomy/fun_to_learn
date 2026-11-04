@@ -73,6 +73,7 @@ test('English: local real photos, bilingual search, six situations, quiz, profil
   await expect(page.getByRole('heading', { name: 'bus, 내 말로 한 걸음!' })).toBeVisible();
   await page.getByRole('button', { name: '학습카드 꾸미기' }).click();
   await page.getByLabel('이름 또는 별명').fill('민우');
+  await page.getByText('기존 표식도 선택하기', { exact: true }).click();
   await page.getByRole('button', { name: '나침반 표식' }).click();
   await page.getByRole('button', { name: '학습카드 저장' }).click();
   await page.reload();
@@ -198,6 +199,8 @@ test('English: voices use en-US, narration follows the current scene and survive
   });
   await page.reload();
   await page.getByRole('button', { name: '사진 단어', exact: true }).click();
+  await page.getByLabel('단어 찾기').fill('bus');
+  await page.getByRole('button', { name: '찾기', exact: true }).click();
   await page.getByRole('button', { name: '단어 듣기', exact: true }).click();
   await expect(page.getByRole('status')).toContainText('영어 읽기 목소리');
 });
@@ -268,12 +271,12 @@ test('Fun To Run: title and chosen character persist without resetting learning 
   await page.goto('/');
   await expect(page).toHaveTitle('Fun To Run — 사진으로 배우는 생활 영어');
   await expect(page.getByRole('button', { name: 'Fun To Run 홈', exact: true })).toBeVisible();
-  await expect(page.locator('.run-companion-face')).toHaveText('🐰');
+  await expect(page.locator('.run-companion-face img')).toHaveAttribute('alt', '피카츄 표식');
   await page.getByRole('button', { name: '학습 친구 바꾸기' }).click();
-  await page.getByRole('button', { name: '고양이 캐릭터', exact: true }).click();
+  await page.getByRole('button', { name: '리자몽 표식', exact: true }).click();
   await page.getByRole('button', { name: '학습카드 저장', exact: true }).click();
   await page.reload();
-  await expect(page.locator('.run-companion-face')).toHaveText('🐱');
+  await expect(page.locator('.run-companion-face img')).toHaveAttribute('alt', '리자몽 표식');
   await page.getByRole('button', { name: '퀴즈', exact: true }).click();
   await complete(page);
   await expect(page.locator('.forest-result-stats')).toContainText('100점');
@@ -281,7 +284,7 @@ test('Fun To Run: title and chosen character persist without resetting learning 
   await page.getByRole('button', { name: 'Fun To Run 홈', exact: true }).click();
   await expect(page.getByLabel('나의 학습 현황')).toContainText('10 P');
   await page.reload();
-  await expect(page.locator('.run-companion-face')).toHaveText('🐱');
+  await expect(page.locator('.run-companion-face img')).toHaveAttribute('alt', '리자몽 표식');
   await expect(page.locator('.forest-leaves')).toContainText('10 P');
   await page.setViewportSize({ width: 320, height: 740 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(

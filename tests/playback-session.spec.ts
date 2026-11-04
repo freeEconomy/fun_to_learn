@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { dailyPhotoWords } from '../lib/forest/daily-learning';
 
 // Explicitly exercise the device-voice fallback for browsers without MP3 support.
 test.beforeEach(async ({ page }) => {
@@ -99,7 +100,7 @@ for (const mode of ['missing', 'denied'] as const)
     await mock(page, mode);
     await listen(page);
     expect(await page.evaluate(() => (window as any).__utterances.at(-1).text)).toBe(
-      'May I sit here?',
+      dailyPhotoWords()[0].sentences[0],
     );
     await expect(page.getByRole('button', { name: '영어 읽기 멈춤', exact: true })).toBeVisible();
   });
