@@ -39,6 +39,14 @@
       backdrop-filter: blur(8px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
+    .stitch-codex-reference {
+      top: 260px;
+      left: 340px;
+    }
+    .stitch-codex-reference-dot {
+      width: 6px;
+      height: 6px;
+    }
   
 
 #original-image-open{position:fixed;right:20px;bottom:20px;z-index:50;border:1px solid #cbd5e1;border-radius:999px;background:#fff;color:#334155;padding:10px 16px;box-shadow:0 4px 18px #0f172a26;font:600 13px Pretendard,sans-serif;cursor:pointer}
@@ -133,6 +141,10 @@
 <marker id="arrow-orange" markerHeight="6" markerWidth="6" orient="auto-start-reverse" refX="8" refY="5" viewBox="0 0 10 10">
 <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#ea580c"></path>
 </marker>
+<!-- Stitch design reference arrow -->
+<marker id="arrow-purple" markerHeight="6" markerWidth="6" orient="auto" refX="6" refY="5" viewBox="0 0 10 10">
+<path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#8b5cf6"></path>
+</marker>
 </defs>
 <!-- Flow 1: ChatGPT -> Stitch -->
 <path class="diagram-connector" d="M 300 120 L 450 120" marker-end="url(#arrow)" stroke="#94a3b8" stroke-width="2.5"></path>
@@ -150,6 +162,8 @@
 <path class="diagram-connector" d="M 830 495 L 830 550" marker-end="url(#arrow)" stroke="#94a3b8" stroke-width="2.5"></path>
 <!-- Flow 8: User Feedback Loop -> ChatGPT (Dashed Orange Loop) -->
 <path class="feedback-dash" d="M 755 625 L 230 625 L 230 480" marker-end="url(#arrow-orange)" stroke="#ea580c" stroke-width="2.5"></path>
+<!-- Flow 9: Stitch -> Codex (Direct design/spec reference) -->
+<path id="stitch-codex-connector" class="diagram-connector" d="M 480 185 Q 360 230 295 342" marker-end="url(#arrow-purple)" stroke="#8b5cf6" stroke-dasharray="6 4" stroke-width="2.2"></path>
 </svg>
 <!-- CONNECTOR LABELS (Floating Pills) -->
 <!-- 1. ChatGPT -> Stitch Label -->
@@ -183,6 +197,8 @@
 <!-- 8. Feedback Loop Label -->
 <div class="absolute bottom-[44px] left-[380px] -translate-x-1/2 z-20 bg-orange-50 text-orange-700 border border-orange-200 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide shadow-sm flex items-center gap-1.5 pointer-events-none"><svg class="w-3.5 h-3.5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg> 사용자 검토 피드백 → Codex 즉각 수정·반복</div>
 <!-- ================= NODE ELEMENTS ================= -->
+<!-- 9. Stitch -> Codex Label -->
+<div class="stitch-codex-reference absolute -translate-x-1/2 z-20 bg-purple-50 text-purple-800 border border-purple-200 px-2.5 py-1 rounded-full text-[10.5px] font-semibold shadow-sm pointer-events-none whitespace-nowrap flex items-center gap-1"><span class="stitch-codex-reference-dot rounded-full bg-purple-600 inline-block" aria-hidden="true"></span>디자인·스펙 직접 참조</div>
 <!-- NODE 1: ChatGPT (Top Left) -->
 <div class="node-pulse absolute top-[45px] left-[155px] w-[150px] h-[150px] rounded-full bg-gradient-to-tr from-emerald-700 to-emerald-500 text-white flex flex-col items-center justify-center shadow-glow-chatgpt z-20 border-4 border-white cursor-pointer select-none">
 <!-- Node Icon -->
