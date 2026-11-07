@@ -703,6 +703,22 @@ export const tales: Tale[] = [
 ];
 export const gameModes = [
   {
+    id: 'chess',
+    title: '영어 체스 클럽',
+    subtitle: '말을 움직이고 영어 작전으로 체크메이트!',
+    emoji: '♟️',
+    tag: '체스 + 영어 작전',
+    color: '#e8e5d4',
+  },
+  {
+    id: 'gomoku',
+    title: '영어 오목 탐험',
+    subtitle: '숫자와 방향을 배우며 다섯 돌을 이어요',
+    emoji: '⚫',
+    tag: '오목 + 숫자·방향',
+    color: '#eee0c5',
+  },
+  {
     id: 'soccer',
     title: '영어 골! 축구 챌린지',
     subtitle: '비슷한 영어 작전을 구별하고 골을 넣어요',

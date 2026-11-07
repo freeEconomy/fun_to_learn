@@ -1,0 +1,777 @@
+.strategy-world {
+  --board-ink: #28463f;
+  --board-gold: #d4a35b;
+  color: var(--board-ink);
+  margin-top: 22px;
+}
+.strategy-scorebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border: 1px solid #dce4dc;
+  background: #fafaf4;
+  border-radius: 18px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  font-weight: 800;
+}
+.strategy-scorebar > span {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.strategy-scorebar > strong {
+  font-size: 21px;
+  letter-spacing: 0;
+}
+.strategy-scorebar small {
+  font-size: 12px;
+  font-weight: 500;
+}
+.turn-light {
+  width: 8px;
+  height: 8px;
+  background: #5e9479;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px #5e94791a;
+}
+.strategy-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(240px, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.strategy-main,
+.strategy-side {
+  min-width: 0;
+}
+.strategy-side {
+  display: grid;
+  gap: 18px;
+}
+.board-coach {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 100px;
+  margin: 0 0 20px;
+}
+.board-coach-face {
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 0 #dce6d0);
+}
+.board-coach > div {
+  border-radius: 18px 18px 18px 4px;
+  background: #e9efdf;
+  padding: 14px 18px;
+  flex: 1;
+}
+.board-coach > div > span {
+  font-size: 9px;
+  letter-spacing: 0.13em;
+  font-weight: 800;
+  color: #6d8269;
+}
+.board-coach p {
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.6;
+  min-height: 23px;
+}
+.board-table {
+  padding: 12px;
+  background: #ede3ce;
+  border: 1px solid #d7c8aa;
+  border-radius: 24px;
+  box-shadow:
+    0 10px 0 -4px #c4b99f,
+    0 18px 28px -18px #6a674f55;
+}
+.board-player {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 4px 14px;
+}
+.board-player:last-child {
+  padding: 16px 4px 4px;
+}
+.board-player > span:nth-child(2) {
+  display: grid;
+  line-height: 1.4;
+  gap: 3px;
+}
+.board-player strong {
+  font-size: 13px;
+}
+.board-player small {
+  font-size: 10px;
+  color: #7d7d69;
+}
+.player-token {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  background: #3b5248;
+  color: #fff9e7;
+  font-size: 13px;
+  font-weight: 800;
+}
+.my-token {
+  font-size: 9px;
+  background: #fcf8ed;
+  color: #4b6557;
+  box-shadow: 0 0 0 1px #c3bca4;
+}
+.piece-color {
+  margin-left: auto;
+  font-size: 10px;
+  white-space: nowrap;
+  color: #696f5c;
+}
+.chess-frame {
+  padding: 5px;
+  border: 1px solid #acb79e;
+  background: #a9b79b;
+  border-radius: 8px;
+}
+.chess-board {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  aspect-ratio: 1;
+}
+.strategy-world .chess-square {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 0;
+  padding: 4px;
+  min-width: 0;
+  touch-action: manipulation;
+  border-radius: 0;
+}
+.strategy-world .chess-square.light {
+  background: #f4eddb;
+}
+.strategy-world .chess-square.dark {
+  background: #9daf96;
+}
+.strategy-world .chess-square:disabled,
+.strategy-world .gomoku-point:disabled {
+  opacity: 1;
+  cursor: default;
+}
+.strategy-world .chess-square.last-move {
+  background: #d9cf8e;
+}
+.strategy-world .chess-square.selected {
+  background: #e8ce78;
+  box-shadow: inset 0 0 0 3px #9c7d36;
+}
+.strategy-world .chess-square.in-check {
+  background: #e9aa86;
+}
+.chess-piece {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 1px #19352e33);
+}
+.chess-square .chess-piece {
+  max-width: 60px;
+  max-height: 60px;
+}
+.rank-label,
+.file-label {
+  position: absolute;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+  color: #4a604f;
+  pointer-events: none;
+}
+.rank-label {
+  top: 3px;
+  left: 3px;
+}
+.file-label {
+  bottom: 2px;
+  right: 3px;
+}
+.legal-marker {
+  position: absolute;
+  width: 24%;
+  height: 24%;
+  background: #31574a88;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px #f8f4e366;
+  pointer-events: none;
+}
+.legal-marker.capture {
+  width: 91%;
+  height: 91%;
+  background: transparent;
+  border: 4px solid #c98248;
+  box-shadow: none;
+}
+.strategy-world .chess-square.legal:not(:disabled):hover {
+  box-shadow: inset 0 0 0 3px #42765b;
+  background: #dce6b2;
+}
+.strategy-world .chess-square:focus-visible,
+.strategy-world .gomoku-point:focus-visible {
+  outline: 3px solid #4d72ad;
+  outline-offset: -3px;
+  z-index: 1;
+}
+.gomoku-frame {
+  padding: 7px;
+  background: linear-gradient(145deg, #f1d7a2, #ddba7e);
+  border: 1px solid #c5a263;
+  border-radius: 8px;
+}
+.gomoku-board {
+  display: grid;
+  aspect-ratio: 1;
+}
+.strategy-world .gomoku-point {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  touch-action: manipulation;
+}
+.gomoku-point::before,
+.gomoku-point::after {
+  content: '';
+  position: absolute;
+  background: #95764288;
+  pointer-events: none;
+}
+.gomoku-point::before {
+  height: 1px;
+  width: 100%;
+  left: 0;
+  top: 50%;
+}
+.gomoku-point::after {
+  width: 1px;
+  height: 100%;
+  top: 0;
+  left: 50%;
+}
+.gomoku-point[data-edge*='l']::before {
+  width: 50%;
+  left: 50%;
+}
+.gomoku-point[data-edge*='r']::before {
+  width: 50%;
+}
+.gomoku-point[data-edge*='t']::after {
+  height: 50%;
+  top: 50%;
+}
+.gomoku-point[data-edge*='b']::after {
+  height: 50%;
+}
+.board-star {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #80612e;
+  z-index: 1;
+}
+.gomoku-stone {
+  width: 84%;
+  height: 84%;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  box-shadow: 1px 3px 4px #4f42264a;
+}
+.gomoku-stone.black {
+  background: radial-gradient(circle at 32% 24%, #627369, #34423b 42%, #1b2b24 80%);
+  border: 1px solid #24382d;
+}
+.gomoku-stone.white {
+  background: radial-gradient(circle at 32% 24%, #fffef8, #f5efdf 55%, #d1c6ad);
+  border: 1px solid #ccbc97;
+}
+.gomoku-stone > i {
+  width: 19%;
+  height: 19%;
+  border: 2px solid #d39b51;
+  border-radius: 50%;
+}
+.gomoku-point.winning .gomoku-stone {
+  outline: 3px solid #71a060;
+  outline-offset: 1px;
+}
+.strategy-world .gomoku-point:not(:disabled):hover {
+  background: #fff8da66;
+  border-radius: 50%;
+}
+.board-notice {
+  font-size: 12px;
+  color: #70816c;
+  line-height: 1.6;
+  padding: 18px 3px 8px;
+  min-height: 58px;
+}
+.board-tools {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.board-tools > button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  padding: 10px 12px;
+  background: #f8f8ef;
+  border: 1px solid #dde3d4;
+  border-radius: 12px;
+  color: #526a55;
+  min-height: 44px;
+}
+.board-learning-card,
+.board-pocket-guide {
+  padding: 24px;
+  border: 1px solid #dce5d9;
+  background: #f8faf3;
+  border-radius: 24px;
+}
+.board-kicker {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  font-weight: 800;
+  color: #759071;
+}
+.forest-app .board-learning-card h2 {
+  font-size: 21px;
+  margin: 9px 0;
+  letter-spacing: -0.06em;
+}
+.board-learning-card > p {
+  font-size: 13px;
+  color: #778370;
+  line-height: 1.8;
+}
+.board-mission-stars {
+  display: flex;
+  gap: 8px;
+  margin: 20px 0 8px;
+}
+.board-mission-stars > span {
+  color: #dedfd0;
+  font-size: 27px;
+  line-height: 1;
+}
+.board-mission-stars .earned {
+  color: #d49b45;
+  filter: drop-shadow(0 2px 0 #b27d2929);
+}
+.board-mission-count {
+  font-size: 12px;
+  font-weight: 650;
+  color: #75816c;
+}
+.board-ready {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px dashed #c8d6bc;
+}
+.board-ready > svg {
+  color: #507d53;
+}
+.board-ready > p {
+  font-size: 13px;
+  font-weight: 650;
+  margin-bottom: 14px;
+}
+.board-ready .forest-button {
+  width: 100%;
+  font-size: 13px;
+  padding: 12px 10px;
+}
+.board-pocket-guide {
+  background: #fffdf7;
+}
+.board-pocket-guide h3 {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+.board-pocket-guide > p {
+  font-size: 12px;
+  color: #809079;
+  margin: 8px 0 14px;
+}
+.board-vocabulary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.board-vocabulary > button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  background: #f3f3e9;
+  border: 1px solid #e6e8d9;
+  border-radius: 12px;
+  padding: 9px 8px;
+  color: #4f6453;
+  text-align: left;
+  min-height: 57px;
+}
+.board-vocabulary .chess-piece {
+  width: 24px;
+  height: 29px;
+  flex-shrink: 0;
+}
+.board-vocabulary > button > span {
+  display: grid;
+  line-height: 1.45;
+}
+.board-vocabulary strong {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+.board-vocabulary small {
+  font-size: 10px;
+  color: #839075;
+}
+.board-vocabulary > button > svg:last-child {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 13px;
+}
+.board-vocabulary > button:hover {
+  background: #e8eedc;
+}
+.board-rules {
+  margin-top: 24px;
+  padding: 24px;
+  border: 1px solid #dee7d5;
+  background: #fbfcf5;
+  border-radius: 20px;
+}
+.forest-app .board-rules h2 {
+  font-size: 19px;
+  margin: 0 0 13px;
+}
+.board-rules p {
+  font-size: 13px;
+  line-height: 1.9;
+  color: #6b7c61;
+  margin: 8px 0;
+}
+.board-reset {
+  margin: 18px 0;
+  padding: 20px;
+  background: #fff5dc;
+  border: 1px solid #e8d6ad;
+  border-radius: 18px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.board-reset > p {
+  width: 100%;
+  font-size: 14px;
+  font-weight: 650;
+}
+.board-reset > button {
+  font-size: 12px;
+  min-height: 44px;
+  padding: 9px 14px;
+}
+.board-mission {
+  width: min(460px, calc(100vw - 24px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  border: 1px solid #d9e4d2;
+  border-radius: 28px;
+  padding: 26px;
+  background: #fffdf5;
+  color: #345343;
+  box-shadow: 0 24px 100px #173b3866;
+  overflow-y: auto;
+}
+.board-mission::backdrop {
+  background: #193b335c;
+  backdrop-filter: blur(4px);
+}
+.board-mission-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.board-mission-top > span {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+  color: #819775;
+}
+.board-mission-top > button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  background: #eef2e5;
+  border: 0;
+  border-radius: 50%;
+}
+.board-mission h2 {
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  margin: 8px 0 !important;
+}
+.board-mission-prompt {
+  font-size: 15px;
+  line-height: 1.7;
+}
+.board-listen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 55px;
+  margin: 20px 0 14px;
+  background: #345e4e;
+  color: #fffdf0;
+  border: 0;
+  border-radius: 15px;
+  font-weight: 700;
+  box-shadow: 0 4px 0 #254a3a;
+}
+.board-word-options {
+  display: grid;
+  gap: 8px;
+}
+.board-word-options > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid #dae1cd;
+  border-radius: 13px;
+  background: #fffefa;
+  min-height: 50px;
+  padding: 10px 14px;
+  font-size: 18px;
+  font-weight: 750;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+.board-word-options > button.correct {
+  background: #e1edd4;
+  border: 2px solid #6e9564;
+}
+.board-word-options > button.retry {
+  border-color: #cf9563;
+  background: #fff2df;
+}
+.forest-app .board-word-options > button:disabled {
+  opacity: 1;
+}
+.board-mission-feedback {
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 14px 0 !important;
+  min-height: 40px;
+  color: #75866d;
+}
+.board-hint-toggle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 auto 17px;
+  border: 0;
+  background: transparent;
+  padding: 10px;
+  min-height: 44px;
+  font-size: 13px;
+  color: #718662;
+}
+.board-hint {
+  padding: 12px 14px;
+  margin: 0 0 16px !important;
+  border-radius: 12px;
+  background: #f0f1e4;
+  font-size: 12px;
+  line-height: 1.9;
+}
+.board-hint strong {
+  font-size: 15px;
+  letter-spacing: 0;
+}
+.board-confirm {
+  width: 100%;
+}
+.board-promotion {
+  padding: 14px 0;
+  border: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.board-promotion legend {
+  font-size: 13px;
+  font-weight: 700;
+}
+.board-promotion label {
+  text-align: center;
+  background: #edf0df;
+  border-radius: 12px;
+  padding: 9px 4px;
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+}
+.board-promotion .chess-piece {
+  height: 38px;
+}
+.board-promotion span {
+  font-size: 11px;
+}
+@media (max-width: 800px) {
+  .strategy-layout {
+    grid-template-columns: 1fr;
+  }
+  .strategy-side {
+    grid-template-columns: 1fr 1fr;
+  }
+  .board-learning-card,
+  .board-pocket-guide {
+    padding: 18px;
+  }
+  .board-vocabulary {
+    grid-template-columns: 1fr;
+  }
+  .board-coach {
+    margin-bottom: 16px;
+  }
+  .strategy-scorebar {
+    padding: 12px 16px;
+  }
+}
+@media (max-width: 520px) {
+  .strategy-world {
+    margin-top: 14px;
+  }
+  .strategy-side {
+    grid-template-columns: 1fr;
+  }
+  .strategy-side .board-pocket-guide {
+    order: 2;
+  }
+  .board-vocabulary {
+    grid-template-columns: 1fr 1fr;
+  }
+  .board-coach {
+    gap: 10px;
+  }
+  .board-coach-face {
+    width: 58px;
+    height: 58px;
+  }
+  .board-coach > div {
+    padding: 10px 12px;
+  }
+  .board-coach p {
+    font-size: 12px;
+  }
+  .board-table {
+    padding: 8px;
+    border-radius: 18px;
+  }
+  .board-player {
+    gap: 8px;
+  }
+  .board-player strong {
+    font-size: 12px;
+  }
+  .piece-color {
+    font-size: 9px;
+  }
+  .strategy-scorebar {
+    font-size: 10px;
+  }
+  .board-tools {
+    gap: 5px;
+  }
+  .board-tools > button {
+    font-size: 10px;
+    padding: 8px;
+  }
+  .chess-frame {
+    padding: 3px;
+  }
+  .strategy-world .chess-square {
+    padding: 3px;
+  }
+  .rank-label,
+  .file-label {
+    font-size: 7px;
+  }
+  .board-mission {
+    padding: 19px;
+    border-radius: 22px;
+  }
+  .board-mission h2 {
+    font-size: 22px;
+  }
+  .board-mission-prompt {
+    font-size: 14px;
+  }
+  .board-mission-stars {
+    margin-top: 14px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .chess-piece,
+  .gomoku-stone {
+    animation: board-arrive 0.18s ease-out;
+  }
+  .board-word-options > button {
+    transition:
+      background 0.16s,
+      transform 0.16s;
+  }
+  .board-word-options > button:not(:disabled):active {
+    transform: scale(0.98);
+  }
+}
+@keyframes board-arrive {
+  from {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

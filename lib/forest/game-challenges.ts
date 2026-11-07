@@ -26,6 +26,14 @@ export const gameSettings = {
   },
 } as const;
 export const gameDescriptions: Record<GameId, Record<GameLevel, string>> = {
+  chess: {
+    practice: '영어 미션 4개 · 차근차근 대국',
+    challenge: '영어 미션 6개 · 앞 수를 생각하는 친구',
+  },
+  gomoku: {
+    practice: '9×9 작은 판 · 영어 미션 4개',
+    challenge: '11×11 판 · 영어 미션 6개와 수비 작전',
+  },
   memory: { practice: '4쌍 · 사진과 단어', challenge: '6쌍 · 더 많은 카드를 기억해요' },
   listen: { practice: '5문제 · 보기 3개', challenge: '6문제 · 비슷한 보기 4개' },
   train: { practice: '5문장 · 짧은 문장', challenge: '6문장 · 필요 없는 낱말도 있어요' },

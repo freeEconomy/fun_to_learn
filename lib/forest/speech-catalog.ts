@@ -1,3 +1,4 @@
+import { boardSpeechTexts } from './board-learning';
 import { words } from './content';
 import { tales, trainRounds } from './adventures';
 import { soccerChallenges } from './soccer-content';
@@ -7,6 +8,7 @@ import { normalizeSpeech } from './speech-text';
 export const speechTexts = [
   ...new Set(
     [
+      ...boardSpeechTexts,
       'May I sit here?',
       'Hello. May I sit here, please?',
       ...words.flatMap((w) => [

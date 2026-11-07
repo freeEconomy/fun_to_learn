@@ -7,3 +7,5 @@ playwright-report/
 test-results/
 # Preserve the uploaded standalone document byte for byte.
 public/architecture.html
+# Upstream BSD-2-Clause rules engine, kept unmodified.
+lib/forest/vendor/chess.js

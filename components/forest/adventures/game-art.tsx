@@ -1,8 +1,11 @@
 'use client';
 import { useId } from 'react';
+import { ChessPiece } from './chess-piece';
 import type { GameId } from '@/lib/forest/adventures';
 
 const palettes = {
+  chess: ['#e8e9d6', '#9caf96'],
+  gomoku: ['#f4e6ca', '#d5b579'],
   soccer: ['#c7eadb', '#79b798'],
   memory: ['#dbe4fa', '#8d9ed0'],
   listen: ['#d6ecf5', '#75b7c9'],
@@ -41,6 +44,75 @@ export function GameArt({ game, className = '' }: { game: GameId; className?: st
         opacity=".8"
       />
       <ellipse cx="150" cy="151" rx="95" ry="10" fill="#173748" opacity=".12" />
+      {(game === 'chess' || game === 'gomoku') && (
+        <>
+          <g transform="translate(62 33) rotate(-7 90 58)">
+            <rect x="-6" y="0" width="188" height="122" rx="9" fill="#687d66" opacity=".3" />
+            <rect y="-6" width="180" height="120" rx="7" fill="#f7efd8" />
+            {Array.from({ length: 48 }, (_, i) => {
+              const x = i % 8,
+                y = Math.floor(i / 8);
+              return (
+                <rect
+                  key={i}
+                  x={x * 22.5}
+                  y={y * 20 - 6}
+                  width="22.5"
+                  height="20"
+                  fill={game === 'chess' ? ((x + y) % 2 ? '#91a48a' : '#f6efd9') : '#e8c78c'}
+                />
+              );
+            })}
+            {game === 'gomoku' && (
+              <path
+                d="M11 4v100m22-100v100m23-100v100m22-100v100m23-100v100m22-100v100m23-100v100m23-100v100M11 4h158M11 24h158M11 44h158M11 64h158M11 84h158M11 104h158"
+                stroke="#ac8c51"
+                strokeWidth="1"
+              />
+            )}
+          </g>
+          {game === 'chess' ? (
+            <>
+              <g transform="translate(92 47) rotate(-8 30 40)">
+                <svg width="60" height="80" viewBox="0 0 64 64">
+                  <ChessPiece type="n" />
+                </svg>
+              </g>
+              <g transform="translate(153 68) rotate(6 30 40)">
+                <svg width="60" height="80" viewBox="0 0 64 64">
+                  <ChessPiece type="k" white={false} />
+                </svg>
+              </g>
+            </>
+          ) : (
+            <>
+              {[
+                [104, 66],
+                [131, 82],
+                [157, 99],
+                [181, 114],
+              ].map(([cx, cy], i) => (
+                <g key={i}>
+                  <ellipse cx={cx} cy={cy + 4} rx="13" ry="7" fill="#705c3a" opacity=".25" />
+                  <circle cx={cx} cy={cy} r="12" fill="#354b40" />
+                  <circle cx={cx - 3} cy={cy - 4} r="3" fill="#607767" />
+                </g>
+              ))}
+              {[
+                [155, 57],
+                [181, 75],
+                [108, 110],
+              ].map(([cx, cy], i) => (
+                <circle key={i} cx={cx} cy={cy} r="12" fill="#fff9e9" stroke="#baa26c" />
+              ))}
+            </>
+          )}
+          <circle cx="233" cy="41" r="22" fill="#fff9e9" />
+          <text x="233" y="47" textAnchor="middle" fontSize="17" fontWeight="800" fill="#456852">
+            {game === 'chess' ? 'ABC' : '1·2·3'}
+          </text>
+        </>
+      )}
       {game === 'soccer' && (
         <>
           <path d="M45 132L77 62H223L255 132Z" fill="#5c9e76" />

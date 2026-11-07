@@ -150,7 +150,7 @@ test('arcade posters and progress use real game records, existing difficulty and
   });
   await page.reload();
   await page.getByRole('button', { name: '게임', exact: true }).click();
-  await expect(page.locator('.game-poster .game-art')).toHaveCount(7);
+  await expect(page.locator('.game-poster .game-art')).toHaveCount(9);
   await expect(page.locator('.game-today-win')).toHaveCount(1);
   await expect(page.locator('.arcade-hero-stats')).toContainText('1개 오늘 완료');
   await expect(page.getByRole('radio', { name: /도전 모드/ })).toBeChecked();

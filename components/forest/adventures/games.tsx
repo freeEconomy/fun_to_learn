@@ -1,5 +1,6 @@
 'use client';
 import { SoccerGame } from './soccer';
+import { BoardGame } from './board-games';
 import { GameArt } from './game-art';
 import { learningDay } from '@/lib/forest/daily-learning';
 import './arcade-premium.css';
@@ -572,6 +573,15 @@ export function GameArcade({
             setRun((n) => n + 1);
           }}
           onBack={back}
+        />
+      ) : selected === 'chess' || selected === 'gomoku' ? (
+        <BoardGame
+          key={`${run}-${selected}`}
+          kind={selected}
+          level={level}
+          speak={speak}
+          stop={stop}
+          onFinish={finish}
         />
       ) : selected === 'soccer' ? (
         <SoccerGame key={run} level={level} speak={speak} stop={stop} onFinish={finish} />

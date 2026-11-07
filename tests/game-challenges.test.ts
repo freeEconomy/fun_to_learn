@@ -130,7 +130,7 @@ test('new games handle repeated letters, exclusive destinations, longer sequence
   assert.equal(new Set(banana.map((tile) => tile.id)).size, 8);
 });
 
-test('seven games keep scores within 50–100 and share the existing daily reward cap across levels', () => {
+test('all games keep scores within 50–100 and share the existing daily reward cap across levels', () => {
   for (const total of [4, 5, 6, 8])
     for (let correct = 0; correct <= total; correct++) {
       assert.ok(Number.isInteger(gameScore(correct, total)));
@@ -148,7 +148,7 @@ test('seven games keep scores within 50–100 and share the existing daily rewar
     assert.equal(repeat.pointsEarned, 0);
     progress = repeat.progress;
   }
-  assert.equal(progress.activityRecords.length, 7);
+  assert.equal(progress.activityRecords.length, gameModes.length);
   assert.deepEqual(readAdventure(progress), progress);
   assert.ok(progress.activityRecords.every((record) => record.score === 100));
 });

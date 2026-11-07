@@ -1,3 +1,9 @@
+# Fun To Run — 생활 영어 놀이터
+
+현재 홈 화면은 아이를 위한 영어 학습 앱입니다. 사진 단어·30편의 동화·9개 게임을 제공하며 학습 기록은 기기 브라우저의 localStorage에 저장합니다. 새 **영어 체스 클럽·영어 오목 탐험**의 규칙, 영어 미션과 검증 방법은 [영어 보드 게임 안내](docs/english-board-games.md)에 정리했습니다.
+
+아래는 같은 저장소에 유지된 DocuMind 문서 에이전트 기능의 설정 안내입니다.
+
 # DocuMind — 문서 에이전트
 
 Next.js App Router + React + TypeScript + Tailwind 앱입니다. **Neon PostgreSQL에 계정·문서 정보·검색 청크·대화를, Vercel Private Blob에 원본 파일을 저장**합니다. 소스 배포와 데이터 보관이 분리되어 Vercel 재배포 후에도 같은 저장소의 데이터를 이용합니다. 새 DB에는 사용자·샘플 문서를 넣지 않습니다.

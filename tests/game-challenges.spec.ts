@@ -40,12 +40,12 @@ async function next(page: Page, last: boolean) {
   await page.getByRole('button', { name: last ? '모험 마치기' : '다음 미션', exact: true }).click();
 }
 
-test('challenge is the default, seven games show rules and practice preserves the original card count', async ({
+test('challenge is the default, nine games show rules and practice preserves the original card count', async ({
   page,
 }) => {
   await page.getByRole('button', { name: '게임', exact: true }).click();
   await expect(page.getByRole('radio', { name: /도전 모드/ })).toBeChecked();
-  await expect(page.locator('.game-tile')).toHaveCount(7);
+  await expect(page.locator('.game-tile')).toHaveCount(9);
   await expect(page.getByRole('button', { name: '짝꿍 카드 시작', exact: true })).toContainText(
     '6쌍',
   );
@@ -391,7 +391,7 @@ test('new games fit 320px, use keyboard-sized controls and stop narration when l
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({
-    path: test.info().outputPath('seven-games-menu-320.png'),
+    path: test.info().outputPath('nine-games-menu-320.png'),
     fullPage: true,
   });
   expect(errors).toEqual([]);
