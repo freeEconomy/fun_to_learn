@@ -79,6 +79,46 @@
     }
   
 
+    .case-studies-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .case-study-card {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-width: 0;
+      padding: 26px;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      background: #fff;
+      color: #0f172a;
+      text-decoration: none;
+      transition: transform .3s ease-out, box-shadow .3s ease-out, border-color .3s ease-out;
+    }
+    .case-study-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .case-study-icon { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; background: var(--case-tint); color: var(--case-accent); }
+    .case-study-icon svg { width: 27px; height: 27px; }
+    .case-study-number { font-size: 10px; font-weight: 700; letter-spacing: .12em; color: #64748b; }
+    .case-study-card h3 { margin: 0 0 8px; font-size: 22px; line-height: 1.3; font-weight: 800; letter-spacing: -.025em; }
+    .case-study-card p { margin: 0; color: #64748b; font-size: 13px; line-height: 1.7; }
+    .case-study-domain { margin-top: auto; padding-top: 4px; color: #64748b; font-size: 11px; overflow-wrap: anywhere; }
+    .case-study-visit { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid #f1f5f9; padding-top: 16px; color: var(--case-accent); font-size: 12px; font-weight: 700; }
+    .case-study-visit svg { width: 17px; height: 17px; flex-shrink: 0; }
+    .case-study-card:focus-visible { outline: 3px solid #2563eb; outline-offset: 4px; }
+    @media (hover: hover) and (pointer: fine) {
+      .case-study-card:hover { transform: translateY(-6px) scale(1.02); border-color: var(--case-accent); box-shadow: 0 18px 36px -18px #0f172a40; }
+    }
+    @media (max-width: 767px) {
+      .case-studies-grid { grid-template-columns: 1fr; gap: 16px; }
+      .case-study-card { padding: 22px; gap: 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .case-study-card { transition: none; }
+      .case-study-card:hover { transform: none; }
+    }
+
 #original-image-open{position:fixed;right:20px;bottom:20px;z-index:50;border:1px solid #cbd5e1;border-radius:999px;background:#fff;color:#334155;padding:10px 16px;box-shadow:0 4px 18px #0f172a26;font:600 13px Pretendard,sans-serif;cursor:pointer}
 #original-image-dialog{width:min(95vw,1320px);max-height:92vh;padding:0;border:1px solid #cbd5e1;border-radius:16px;background:white;color:#0f172a;overflow:auto}
 #original-image-dialog::backdrop{background:#0f172aa6}
@@ -558,6 +598,46 @@
 </div>
 </section>
 <!-- END: CoreToolsSection -->
+<!-- BEGIN: AICaseStudiesSection -->
+<section class="scroll-mt-8" id="case-studies-section" aria-labelledby="case-studies-title">
+<div class="mb-8">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-blue-600" aria-hidden="true"></span>
+<h2 class="text-2xl font-bold text-slate-900" id="case-studies-title">AI 구축 사례</h2>
+</div>
+<p class="text-slate-500 text-sm mt-1">아이디어가 실제 서비스로 이어진 사례를 직접 살펴보세요.</p>
+</div>
+<div class="case-studies-grid">
+<a class="case-study-card" href="https://aiagent-xi-two.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="AI Agent 사이트 열기 (새 탭)" style="--case-accent:#6d28d9;--case-tint:#f5f3ff">
+<div class="case-study-top">
+<span class="case-study-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-5l-5 5v-5Z"/></svg></span>
+<span class="case-study-number">CASE 01</span>
+</div>
+<div><h3>AI Agent</h3><p>AI 구축 사례를 사이트에서 직접 확인해 보세요.</p></div>
+<span class="case-study-domain">aiagent-xi-two.vercel.app</span>
+<span class="case-study-visit">사이트 열기 · 새 탭<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/></svg></span>
+</a>
+<a class="case-study-card" href="https://docuagent-xi.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Fun To Run 사이트 열기 (새 탭)" style="--case-accent:#047857;--case-tint:#ecfdf5">
+<div class="case-study-top">
+<span class="case-study-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16M12 5C9 3 6 3 3 4v15c3-1 6-1 9 2 3-3 6-3 9-2V4c-3-1-6-1-9 1Z"/></svg></span>
+<span class="case-study-number">CASE 02</span>
+</div>
+<div><h3>Fun To Run</h3><p>사진·동화·게임으로 즐겁게 배우는 생활 영어.</p></div>
+<span class="case-study-domain">docuagent-xi.vercel.app</span>
+<span class="case-study-visit">사이트 열기 · 새 탭<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/></svg></span>
+</a>
+<a class="case-study-card" href="https://stock-ai-mocha.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Stock AI 사이트 열기 (새 탭)" style="--case-accent:#0369a1;--case-tint:#f0f9ff">
+<div class="case-study-top">
+<span class="case-study-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18M6 15l5-5 4 3 6-8m-5 0h5v5"/></svg></span>
+<span class="case-study-number">CASE 03</span>
+</div>
+<div><h3>Stock AI</h3><p>AI 구축 사례를 사이트에서 직접 확인해 보세요.</p></div>
+<span class="case-study-domain">stock-ai-mocha.vercel.app</span>
+<span class="case-study-visit">사이트 열기 · 새 탭<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/></svg></span>
+</a>
+</div>
+</section>
+<!-- END: AICaseStudiesSection -->
 </main>
 <!-- END: MainContainer -->
 <!-- BEGIN: Footer -->
