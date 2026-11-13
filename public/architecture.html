@@ -119,6 +119,41 @@
       .case-study-card:hover { transform: none; }
     }
 
+    .case-study-card { position: relative; padding: 0; gap: 0; }
+    .case-study-thumbnail { display: block; overflow: hidden; aspect-ratio: 16 / 10; border-radius: 23px 23px 0 0; background: var(--case-tint); border-bottom: 1px solid #e2e8f0; }
+    .case-study-thumbnail img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+    .case-study-content { display: flex; flex-direction: column; gap: 18px; padding: 22px 24px; flex: 1; }
+    .case-study-link { color: inherit; text-decoration: none; }
+    .case-study-link::after { content: ''; position: absolute; inset: 0; border-radius: 24px; z-index: 1; }
+    .case-study-link:focus-visible { outline: none; }
+    .case-study-link:focus-visible::after { outline: 3px solid #2563eb; outline-offset: 4px; }
+    .case-study-actions { display: flex; min-height: 57px; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; border-top: 1px solid #f1f5f9; padding-top: 16px; }
+    .case-study-actions .case-study-visit { border: 0; padding: 0; gap: 8px; }
+    .case-study-demo { position: relative; z-index: 2; display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 40px; padding: 9px 11px; border-radius: 11px; background: var(--case-tint); color: var(--case-accent); text-decoration: none; font-size: 11px; font-weight: 700; }
+    .case-study-demo svg { width: 16px; height: 16px; }
+    .case-study-demo:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+    .case-study-demo-time { font-variant-numeric: tabular-nums; opacity: .75; }
+    .case-demo-open { overflow: hidden; }
+    .case-demo-dialog { width: min(1100px, calc(100vw - 24px)); max-height: calc(100dvh - 32px); margin: auto; padding: 0; border: 1px solid #cbd5e1; border-radius: 20px; background: #fff; color: #0f172a; overflow: auto; overscroll-behavior: contain; box-shadow: 0 24px 80px #0f172a4d; }
+    .case-demo-dialog::backdrop { background: #0f172abd; backdrop-filter: blur(5px); }
+    .case-demo-header { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 15px 20px; background: #fff; border-bottom: 1px solid #e2e8f0; }
+    .case-demo-header h2 { margin: 0; font-size: 16px; font-weight: 750; line-height: 1.5; }
+    .case-demo-close { display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0; padding: 0; border: 1px solid #e2e8f0; border-radius: 50%; background: #f8fafc; color: #475569; cursor: pointer; }
+    .case-demo-close svg { width: 20px; height: 20px; }
+    .case-demo-dialog video { display: block; width: 100%; max-height: 70dvh; aspect-ratio: 1920 / 802; background: #0f172a; }
+    .case-demo-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 20px; color: #64748b; font-size: 12px; line-height: 1.7; }
+    .case-demo-footer p { margin: 0; }
+    .case-demo-footer a { padding: 7px 0; color: #6d28d9; font-weight: 650; text-decoration: underline; text-underline-offset: 3px; }
+    .case-demo-error { padding: 12px 20px; margin: 0; background: #fff7ed; color: #9a3412; font-size: 13px; line-height: 1.7; }
+    .case-demo-dialog button:focus-visible, .case-demo-dialog a:focus-visible, .case-demo-dialog video:focus-visible { outline: 3px solid #2563eb; outline-offset: -3px; }
+    @media (max-width: 767px) {
+      .case-study-card { padding: 0; gap: 0; }
+      .case-study-content { padding: 20px 22px; gap: 16px; }
+      .case-demo-header { padding: 12px 14px; }
+      .case-demo-header h2 { font-size: 14px; }
+      .case-demo-footer { padding: 12px 14px; }
+    }
+
 #original-image-open{position:fixed;right:20px;bottom:20px;z-index:50;border:1px solid #cbd5e1;border-radius:999px;background:#fff;color:#334155;padding:10px 16px;box-shadow:0 4px 18px #0f172a26;font:600 13px Pretendard,sans-serif;cursor:pointer}
 #original-image-dialog{width:min(95vw,1320px);max-height:92vh;padding:0;border:1px solid #cbd5e1;border-radius:16px;background:white;color:#0f172a;overflow:auto}
 #original-image-dialog::backdrop{background:#0f172aa6}
@@ -608,33 +643,42 @@
 <p class="text-slate-500 text-sm mt-1">아이디어가 실제 서비스로 이어진 사례를 직접 살펴보세요.</p>
 </div>
 <div class="case-studies-grid">
-<a class="case-study-card" href="https://aiagent-xi-two.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="AI Agent 사이트 열기 (새 탭)" style="--case-accent:#6d28d9;--case-tint:#f5f3ff">
+<article class="case-study-card" style="--case-accent:#6d28d9;--case-tint:#f5f3ff">
+<span class="case-study-thumbnail"><img src="/case-studies/ai-agent.jpg" alt="AI Agent의 Aura 일정 비서 로그인 화면" width="1280" height="800" loading="lazy" decoding="async"></span>
+<div class="case-study-content">
 <div class="case-study-top">
 <span class="case-study-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-5l-5 5v-5Z"/></svg></span>
 <span class="case-study-number">CASE 01</span>
 </div>
-<div><h3>AI Agent</h3><p>AI 구축 사례를 사이트에서 직접 확인해 보세요.</p></div>
+<div><h3><a class="case-study-link" href="https://aiagent-xi-two.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="AI Agent 사이트 열기 (새 탭)">AI Agent</a></h3><p>일정 관리와 주간보고를 돕는 나만의 AI 비서.</p></div>
 <span class="case-study-domain">aiagent-xi-two.vercel.app</span>
-<span class="case-study-visit">사이트 열기 · 새 탭<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/></svg></span>
-</a>
-<a class="case-study-card" href="https://docuagent-xi.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Fun To Run 사이트 열기 (새 탭)" style="--case-accent:#047857;--case-tint:#ecfdf5">
+<div class="case-study-actions"><span class="case-study-visit" aria-hidden="true">사이트 열기 · 새 탭<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/></svg></span><a class="case-study-demo" data-case-demo href="/case-studies/ai-agent-demo.mp4" target="_blank" rel="noopener noreferrer" aria-label="AI Agent 시연 영상 보기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4Z"/></svg>시연 영상 보기 <span class="case-study-demo-time">3:11</span></a></div>
+</div>
+</article>
+<article class="case-study-card" style="--case-accent:#047857;--case-tint:#ecfdf5">
+<span class="case-study-thumbnail"><img src="/case-studies/fun-to-run.jpg" alt="Fun To Run 영어 학습 홈 화면" width="1280" height="800" loading="lazy" decoding="async"></span>
+<div class="case-study-content">
 <div class="case-study-top">
 <span class="case-study-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16M12 5C9 3 6 3 3 4v15c3-1 6-1 9 2 3-3 6-3 9-2V4c-3-1-6-1-9 1Z"/></svg></span>
 <span class="case-study-number">CASE 02</span>
 </div>
-<div><h3>Fun To Run</h3><p>사진·동화·게임으로 즐겁게 배우는 생활 영어.</p></div>
+<div><h3><a class="case-study-link" href="https://docuagent-xi.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Fun To Run 사이트 열기 (새 탭)">Fun To Run</a></h3><p>사진·동화·게임으로 즐겁게 배우는 생활 영어.</p></div>
 <span class="case-study-domain">docuagent-xi.vercel.app</span>
-<span class="case-study-visit">사이트 열기 · 새 탭<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/></svg></span>
-</a>
-<a class="case-study-card" href="https://stock-ai-mocha.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Stock AI 사이트 열기 (새 탭)" style="--case-accent:#0369a1;--case-tint:#f0f9ff">
+<div class="case-study-actions"><span class="case-study-visit" aria-hidden="true">사이트 열기 · 새 탭<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/></svg></span></div>
+</div>
+</article>
+<article class="case-study-card" style="--case-accent:#0369a1;--case-tint:#f0f9ff">
+<span class="case-study-thumbnail"><img src="/case-studies/stock-ai.jpg" alt="Stock AI의 Stock Brief 주식 서비스 홈 화면" width="1280" height="800" loading="lazy" decoding="async"></span>
+<div class="case-study-content">
 <div class="case-study-top">
 <span class="case-study-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18M6 15l5-5 4 3 6-8m-5 0h5v5"/></svg></span>
 <span class="case-study-number">CASE 03</span>
 </div>
-<div><h3>Stock AI</h3><p>AI 구축 사례를 사이트에서 직접 확인해 보세요.</p></div>
+<div><h3><a class="case-study-link" href="https://stock-ai-mocha.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Stock AI 사이트 열기 (새 탭)">Stock AI</a></h3><p>Stock Brief에서 살펴보는 주식 시장과 투자 관찰 정보.</p></div>
 <span class="case-study-domain">stock-ai-mocha.vercel.app</span>
-<span class="case-study-visit">사이트 열기 · 새 탭<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/></svg></span>
-</a>
+<div class="case-study-actions"><span class="case-study-visit" aria-hidden="true">사이트 열기 · 새 탭<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/></svg></span></div>
+</div>
+</article>
 </div>
 </section>
 <!-- END: AICaseStudiesSection -->
@@ -668,4 +712,66 @@ const originalDialog=document.getElementById('original-image-dialog');
 document.getElementById('original-image-open').addEventListener('click',()=>{document.getElementById('original-image-download').href=document.getElementById('original-image').src;originalDialog.showModal();});
 document.getElementById('original-image-close').addEventListener('click',()=>originalDialog.close());
 originalDialog.addEventListener('click',event=>{if(event.target===originalDialog){const r=originalDialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)originalDialog.close();}});
-</script></body></html>
+</script>
+<dialog id="case-demo-dialog" class="case-demo-dialog" aria-labelledby="case-demo-title" aria-describedby="case-demo-description">
+<header class="case-demo-header">
+<h2 id="case-demo-title">AI Agent · 주간보고 연동 시연</h2>
+<button id="case-demo-close" class="case-demo-close" type="button" aria-label="시연 영상 닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+</header>
+<video id="case-demo-player" controls playsinline preload="none" poster="/case-studies/ai-agent-demo-poster.jpg" aria-label="Codex로 구현한 주간보고 연동 시연 영상">
+브라우저에서 영상을 재생할 수 없으면 아래의 원본 영상 링크를 이용해 주세요.
+</video>
+<p id="case-demo-error" class="case-demo-error" role="status" hidden>영상을 불러오지 못했습니다. 아래 ‘원본 영상 열기’로 다시 재생해 주세요.</p>
+<div class="case-demo-footer">
+<p id="case-demo-description">3분 11초 · 화면 시연 영상이며, 원본에 음성은 없습니다.</p>
+<a href="/case-studies/ai-agent-demo.mp4" target="_blank" rel="noopener noreferrer">원본 영상 열기 · 새 탭</a>
+</div>
+</dialog>
+<script>
+(()=>{
+  const trigger=document.querySelector('[data-case-demo]');
+  const dialog=document.getElementById('case-demo-dialog');
+  const video=document.getElementById('case-demo-player');
+  const error=document.getElementById('case-demo-error');
+  if(!trigger||!dialog||!video||typeof dialog.showModal!=='function')return;
+  let session=0;
+  trigger.addEventListener('click',event=>{
+    event.preventDefault();
+    error.hidden=true;
+    dialog.showModal();
+    document.body.classList.add('case-demo-open');
+    const current=++session;
+    video.src=trigger.href;
+    const play=video.play();
+    if(play)play.catch(()=>{
+      if(current!==session||!dialog.open)return;
+      // Native controls remain available if automatic playback is declined.
+      if(video.error)error.hidden=false;
+    });
+  });
+  document.getElementById('case-demo-close').addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('close',()=>{
+    session++;
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+    error.hidden=true;
+    document.body.classList.remove('case-demo-open');
+    trigger.focus({preventScroll:true});
+  });
+  video.addEventListener('error',()=>{if(dialog.open&&video.hasAttribute('src'))error.hidden=false;});
+  dialog.addEventListener('click',event=>{
+    if(event.target!==dialog)return;
+    const box=dialog.getBoundingClientRect();
+    if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom)dialog.close();
+  });
+  dialog.addEventListener('keydown',event=>{
+    if(event.key!=='Tab')return;
+    const first=document.getElementById('case-demo-close');
+    const last=dialog.querySelector('.case-demo-footer a');
+    if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+    else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+  });
+})();
+</script>
+</body></html>
